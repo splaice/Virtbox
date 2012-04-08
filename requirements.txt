@@ -1,0 +1,9 @@
+testify
+pep8
+pyflakes
+envoy
+clint
+pyparsing
+sqlalchemy
+PyYAML
+Mock
