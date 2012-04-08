@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-This module contains the primary objects that power Bootstrap.
+This module contains the primary objects that power virtbox.
 
-:copyright: (c) 2012 by Firstname Lastname.
+:copyright: (c) 2012 by Sean Plaice
 :license: ISC, see LICENSE for more details.
 """
 
 import envoy
-from .errors import VirtboxError
+import uuid as pyuuid
+from .errors import VirtboxError, VirtboxManageError, VirtboxCommandError
 from .utils import parse_list_vms, parse_list_ostypes, parse_create_vm
 
 
@@ -28,14 +29,22 @@ class Manage(object):
             _cmd = '%s --basefolder %s' % (_cmd, basefolder)
 
         if uuid:
-            _cmd = '%s --uuid %s' % (_cmd, uuid)
+            if type(uuid) == pyuuid.UUID:
+                _cmd = '%s --uuid %s' % (_cmd, uuid)
+            else:
+                raise VirtboxManageError(
+                        reason='uuid parameter must be a uuid object.')
 
         if register:
             _cmd = '%s --register' % _cmd
+        else:
+            raise VirtboxManageError(
+                    reason='register as False is currently unsupported.')
 
         r = envoy.run(_cmd)
         if r.status_code:
-            raise VirtboxError()
+            raise VirtboxCommandError(status_code=r.status_code, cmd=_cmd,
+                    stdout=r.std_out, stderr=r.std_err)
 
         return parse_create_vm(r.std_out)
 

@@ -1,5 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+This module contains the unit tests for the models module.
+
+:copyright: (c) 2012 by Sean Plaice
+:license: ISC, see LICENSE for more details.
+"""
+
 import testify
+import uuid as pyuuid
 from virtbox.models import Manage
+from virtbox.errors import VirtboxCommandError, VirtboxManageError
 
 
 class ManageCreateTestCase(testify.TestCase):
@@ -7,6 +17,8 @@ class ManageCreateTestCase(testify.TestCase):
     def setup_vm_info(self):
         self.vm_name = 'foobar'
         self.vm_ostype = 'Linux'
+        self.vm_str_uuid = 'cd9ceb52-3852-40c0-8937-2c782b48b6ed'
+        self.vm_uuid = pyuuid.uuid4()
 
     @testify.teardown
     def cleanup_create_vm(self):
@@ -17,6 +29,27 @@ class ManageCreateTestCase(testify.TestCase):
         testify.assert_equal(vm_info['name'], self.vm_name, 'name mismatch')
         testify.assert_gt(len(vm_info['file_path']), 0, 'no file_path set')
         testify.assert_gt(len(vm_info['uuid']), 0, 'no uuid set')
+
+    def test_create_vm_no_ostype(self):
+        vm_info = Manage.create_vm(name=self.vm_name)
+        testify.assert_equal(vm_info['name'], self.vm_name, 'name mismatch')
+        testify.assert_gt(len(vm_info['file_path']), 0, 'no file_path set')
+        testify.assert_gt(len(vm_info['uuid']), 0, 'no uuid set')
+
+    def test_create_vm_with_basefolder(self):
+        vm_info = Manage.create_vm(name=self.vm_name, basefolder='test')
+        testify.assert_equal(vm_info['name'], self.vm_name, 'name mismatch')
+        testify.assert_gt(len(vm_info['file_path']), 0, 'no file_path set')
+        testify.assert_gt(len(vm_info['uuid']), 0, 'no uuid set')
+
+    def test_create_vm_with_uuid(self):
+        testify.assert_raises(VirtboxManageError, Manage.create_vm,
+                name=self.vm_name, uuid=self.vm_str_uuid)
+        vm_info = Manage.create_vm(name=self.vm_name, uuid=self.vm_uuid)
+        testify.assert_equal(vm_info['name'], self.vm_name, 'name mismatch')
+        testify.assert_equal(vm_info['uuid'], str(self.vm_uuid),
+                'uuid mismatch')
+        testify.assert_gt(len(vm_info['file_path']), 0, 'no file_path set')
 
 
 class ManageUnregisterTestCase(testify.TestCase):
