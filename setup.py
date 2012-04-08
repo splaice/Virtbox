@@ -3,29 +3,27 @@
 
 import os
 import sys
-import virtbox
 from distutils.core import setup
 
-# publish package
-#if sys.argv[-1] == 'publish':
-#    os.system('python setup.py sdist upload')
-#    sys.exit()
-#
-## run tests
-#if sys.argv[-1] == 'test':
-#    os.system('python test_requests.py')
-#    sys.exit()
+PACKAGES = ['virtbox']
+
+def get_init_val(val, packages=PACKAGES):
+    pkg_init = "%s/__init__.py" % PACKAGES[0]
+    value = '__%s__' % val
+    fn = open(pkg_init)
+    for line in fn.readlines():
+        if line.startswith(value):
+            return line.split('=')[1].strip().strip("'")
 
 
 setup(
-    name='py-virtbox',
-    version=virtbox.__version__,
-    description='Python Package for Managing Virtualbox.',
+    name='py-%s' % get_init_val('title'),
+    version=get_init_val('version'),
+    description=get_init_val('description'),
     long_description=open('README.rst').read(),
-    author='Sean Plaice',
-    url='http://github.com/splaice/virtbox',
+    author=get_init_val('author'),
+    url=get_init_val('url'),
     package_data={'': ['LICENSE', 'NOTICE']},
-    license=virtbox.__license__,
-    #packages=find_packages()
-    packages=['virtbox']
+    license=get_init_val('license'),
+    packages=PACKAGES
 )
