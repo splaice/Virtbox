@@ -9,14 +9,14 @@ This module contains the primary objects that power virtbox.
 import envoy
 import uuid as pyuuid
 from .errors import VirtboxError, VirtboxManageError, VirtboxCommandError
-from .utils import parse_list_vms, parse_list_ostypes, parse_create_vm
+from .utils import parse_list_vms, parse_list_ostypes, parse_createvm
 
 
 class Manage(object):
     cmd = 'VBoxManage'
 
     @classmethod
-    def create_vm(cls, name=None, ostype=None, register=True, basefolder=None,
+    def createvm(cls, name=None, ostype=None, register=True, basefolder=None,
             uuid=None):
         _cmd = '%s createvm' % cls.cmd
         if name:
@@ -46,14 +46,14 @@ class Manage(object):
             raise VirtboxCommandError(status_code=r.status_code, cmd=_cmd,
                     stdout=r.std_out, stderr=r.std_err)
 
-        return parse_create_vm(r.std_out)
+        return parse_createvm(r.std_out)
 
     @classmethod
     def registervm(cls, filename=None):
         raise VirtboxCommandNotImplemented(reason="not needed at this time")
 
     @classmethod
-    def unregister_vm(cls, name=None, uuid=None, delete=True):
+    def unregistervm(cls, name=None, uuid=None, delete=True):
         _cmd = '%s unregistervm' % cls.cmd
 
         if uuid:

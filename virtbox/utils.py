@@ -43,7 +43,7 @@ def parse_list_ostypes(txt):
     os_type_list = OneOrMore(os_type_group)
     return os_type_list.parseString(txt)
 
-def parse_create_vm(txt):
+def parse_createvm(txt):
     """
     Virtual machine 'foobar' is created and registered.
     UUID: 65749ad3-a77d-4f82-9dac-6d9176bf5d23
