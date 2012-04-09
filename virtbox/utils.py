@@ -7,7 +7,7 @@ virtbox.utils
 This module provides utility functions that are used within Bootstrap
 that are also useful for external consumption.
 
-:copyright: (c) 2012 by Firstname Lastname.
+:copyright: (c) 2012 by Sean Plaice.
 :license: ISC, see LICENSE for more details.
 
 """

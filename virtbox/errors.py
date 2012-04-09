@@ -3,7 +3,7 @@
 """
 This module contains the set of bootstrap's exceptions
 
-:copyright: (c) 2012 by Firstname Lastname.
+:copyright: (c) 2012 by Sean Plaice.
 :license: ISC, see LICENSE for more details.
 
 """
