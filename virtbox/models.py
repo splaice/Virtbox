@@ -49,6 +49,10 @@ class Manage(object):
         return parse_create_vm(r.std_out)
 
     @classmethod
+    def registervm(cls, filename=None):
+        raise VirtboxCommandNotImplemented(reason="not needed at this time")
+
+    @classmethod
     def unregister_vm(cls, name=None, uuid=None, delete=True):
         _cmd = '%s unregistervm' % cls.cmd
 
@@ -65,6 +69,10 @@ class Manage(object):
             raise VirtboxError()
 
         return True
+
+    @classmethod
+    def showvminfo(cls, name=None, uuid=None, log=False):
+        pass
 
     @classmethod
     def _list(cls, arg):

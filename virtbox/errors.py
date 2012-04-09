@@ -43,3 +43,17 @@ class VirtboxCommandError(VirtboxError):
 
     def __str__(self):
         return '%s' % str(self.as_dict())
+
+class VirtboxCommandNotImplemented(VirtboxError):
+    """ This is an error specific top methods that map to commands that are
+        not yet implemented.
+    """
+
+    def __init__(self, reason=None):
+        self.reason = reason
+
+    def as_dict(self):
+        return {'reason': self.reason}
+
+    def __str__(self):
+        return '%s' % str(self.as_dict())
