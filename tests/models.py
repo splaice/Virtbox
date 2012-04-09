@@ -156,6 +156,43 @@ class ManageCreateHDTestCase(testify.TestCase):
                 'created file does not exist')
 
 
+class ManageShowHDInfoTestCase(testify.TestCase):
+    @testify.setup
+    def create_hd(self):
+        self.hd_size = '128'
+        self.hd_format = 'VDI'
+        self.hd_variant = 'Standard'
+        self.hd_filename = '/tmp/test.vdi'
+        self.hd_info = Manage.createhd(filename=self.hd_filename,
+                size=self.hd_size, format=self.hd_format,
+                variant=self.hd_variant)
+
+    @testify.teardown
+    def destory_hdd(self):
+        os.remove(self.hd_filename)
+
+    def test_showhdinfo_by_filename(self):
+        hd_info = Manage.showhdinfo(uuid=self.hd_filename)
+        print hd_info
+
+
+#class ManageCloseMediumTestCase(testify.TestCase):
+#    @testify.setup
+#    def create_hd(self):
+#        self.hd_size = '128'
+#        self.hd_format = 'VDI'
+#        self.hd_variant = 'Standard'
+#        self.hd_filename = '/tmp/test.vdi'
+#        self.hd_info = Manage.createhd(filename=self.hd_filename,
+#                size=self.hd_size, format=self.hd_format,
+#                variant=self.hd_variant)
+#
+#    def test_closemedium_disk_by_uuid_with_delete(self):
+#       out = Manage.closemedium(medium_type='disk', uuid=self.hd_info['uuid'],
+#                delete=True)
+#        print out
+
+
 class ManageListOsTypes(testify.TestCase):
     """Incomplete
     """

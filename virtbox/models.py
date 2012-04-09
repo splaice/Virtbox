@@ -129,7 +129,7 @@ class Manage(object):
     @classmethod
     def closemedium(cls, medium_type=None, uuid=None, filename=None,
             delete=False):
-        _cmd = '%s closemedium %s' % cls.cmd
+        _cmd = '%s closemedium' % cls.cmd
 
         if medium_type:
             if medium_type not in MEDIUM_TYPES:
