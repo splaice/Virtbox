@@ -7,9 +7,7 @@ This module contains the unit tests for the models module.
 """
 
 import testify
-import uuid as pyuuid
 from virtbox.models import Manage
-from virtbox.errors import VirtboxManageError
 
 
 class ManageCreateTestCase(testify.TestCase):
@@ -17,8 +15,7 @@ class ManageCreateTestCase(testify.TestCase):
     def setup_vm_info(self):
         self.vm_name = 'foobar'
         self.vm_ostype = 'Linux'
-        self.vm_str_uuid = 'cd9ceb52-3852-40c0-8937-2c782b48b6ed'
-        self.vm_uuid = pyuuid.uuid4()
+        self.vm_uuid = 'cd9ceb52-3852-40c0-8937-2c782b48b6ed'
 
     @testify.teardown
     def cleanup_createvm(self):
@@ -43,12 +40,9 @@ class ManageCreateTestCase(testify.TestCase):
         testify.assert_gt(len(vm_info['uuid']), 0, 'no uuid set')
 
     def test_createvm_with_uuid(self):
-        testify.assert_raises(VirtboxManageError, Manage.createvm,
-                name=self.vm_name, uuid=self.vm_str_uuid)
         vm_info = Manage.createvm(name=self.vm_name, uuid=self.vm_uuid)
         testify.assert_equal(vm_info['name'], self.vm_name, 'name mismatch')
-        testify.assert_equal(vm_info['uuid'], str(self.vm_uuid),
-                'uuid mismatch')
+        testify.assert_equal(vm_info['uuid'], self.vm_uuid, 'uuid mismatch')
         testify.assert_gt(len(vm_info['file_path']), 0, 'no file_path set')
 
 

@@ -7,7 +7,6 @@ This module contains the primary objects that power virtbox.
 """
 
 import envoy
-import uuid as pyuuid
 from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
     VirtboxCommandNotImplemented)
 from .utils import parse_list_vms, parse_list_ostypes, parse_createvm
@@ -30,11 +29,7 @@ class Manage(object):
             _cmd = '%s --basefolder %s' % (_cmd, basefolder)
 
         if uuid:
-            if type(uuid) == pyuuid.UUID:
-                _cmd = '%s --uuid %s' % (_cmd, uuid)
-            else:
-                raise VirtboxManageError(
-                        reason='uuid parameter must be a uuid object.')
+            _cmd = '%s --uuid %s' % (_cmd, uuid)
 
         if register:
             _cmd = '%s --register' % _cmd
