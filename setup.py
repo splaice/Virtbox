@@ -7,6 +7,7 @@ from distutils.core import setup
 
 PACKAGES = ['virtbox']
 
+
 def get_init_val(val, packages=PACKAGES):
     pkg_init = "%s/__init__.py" % PACKAGES[0]
     value = '__%s__' % val

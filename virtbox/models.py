@@ -8,7 +8,8 @@ This module contains the primary objects that power virtbox.
 
 import envoy
 import uuid as pyuuid
-from .errors import VirtboxError, VirtboxManageError, VirtboxCommandError
+from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
+    VirtboxCommandNotImplemented)
 from .utils import parse_list_vms, parse_list_ostypes, parse_createvm
 
 

@@ -9,7 +9,7 @@ This module contains the unit tests for the models module.
 import testify
 import uuid as pyuuid
 from virtbox.models import Manage
-from virtbox.errors import VirtboxCommandError, VirtboxManageError
+from virtbox.errors import VirtboxManageError
 
 
 class ManageCreateTestCase(testify.TestCase):
@@ -68,6 +68,7 @@ class ManageUnregisterTestCase(testify.TestCase):
         vm_info = Manage.unregistervm(uuid=self.vm_info['uuid'], delete=True)
         testify.assert_equal(vm_info, True, 'returned False')
 
+
 class ManageListVMS(testify.TestCase):
     @testify.setup
     def setup_vm(self):
@@ -84,6 +85,7 @@ class ManageListVMS(testify.TestCase):
         vm_info = Manage.list_vms()[0]
         testify.assert_equal(vm_info['name'], self.vm0_name, 'name mismatch')
         testify.assert_gt(len(vm_info['uuid']), 0, 'no uuid set')
+
 
 class ManageListVMSMany(testify.TestCase):
     @testify.setup
@@ -117,6 +119,7 @@ class ManageListVMSMany(testify.TestCase):
         vm_info2 = Manage.list_vms()[2]
         testify.assert_equal(vm_info2['name'], self.vm2_name, 'name mismatch')
         testify.assert_gt(len(vm_info2['uuid']), 0, 'no uuid set')
+
 
 class ManageListOsTypes(testify.TestCase):
     """Incomplete

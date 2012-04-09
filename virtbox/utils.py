@@ -13,7 +13,7 @@ that are also useful for external consumption.
 """
 
 from pyparsing import (Word, alphas, dblQuotedString, alphanums, srange,
-                       OneOrMore, Group, White, NoMatch, Suppress, Literal,
+                       OneOrMore, Group, Suppress, Literal,
                        LineEnd)
 
 
@@ -43,6 +43,7 @@ def parse_list_ostypes(txt):
     os_type_list = OneOrMore(os_type_group)
     return os_type_list.parseString(txt)
 
+
 def parse_createvm(txt):
     """
     Virtual machine 'foobar' is created and registered.
@@ -58,7 +59,7 @@ def parse_createvm(txt):
     uuid_prefix = Suppress(Word('UUID:'))
     id_vm_uuid = Word(srange("[a-zA-Z0-9_\-]")).setResultsName('uuid')
     file_prefix = Suppress(Word('Settings file:'))
-    id_file_path = Word(alphanums+" /.").setResultsName('file_path')
+    id_file_path = Word(alphanums + " /.").setResultsName('file_path')
     vm_info = Group(name_prefix + single_quote + id_name +
         single_quote + name_postfix + eol + uuid_prefix + id_vm_uuid + eol +
         file_prefix + single_quote + id_file_path + single_quote + eol)
