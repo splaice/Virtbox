@@ -236,4 +236,45 @@ def parse_closemedium(txt):
 
 
 def parse_showhdinfo(txt):
-    return txt
+    """
+    UUID:                 1e489961-954b-455a-80e6-873c2bef681b
+    Accessible:           yes
+    Logical size:         128 MBytes
+    Current size on disk: 0 MBytes
+    Type:                 normal (base)
+    Storage format:       VDI
+    Format variant:       dynamic default
+    Location:             /tmp/test.vdi
+    """
+
+    eol = Suppress(LineEnd())
+    uuid_prefix = Suppress(Word('UUID:'))
+    id_uuid = Word(alphanums + '-').setResultsName('uuid')
+    accessible_prefix = Suppress(Word('Accessible:'))
+    id_accessible = Word(alphas).setResultsName('accessible')
+    logical_size_prefix = Suppress(Word('Logical size:'))
+    id_logical_size = Word(alphanums + ' ').setResultsName('logical_size')
+    current_size_prefix = Suppress(Word('Current size on disk:'))
+    id_current_size = Word(alphanums + ' ').setResultsName('current_size')
+    type_prefix = Suppress(Word('Type:'))
+    id_type = Word(alphas + ' ()').setResultsName('type')
+    prefix_storage_format = Suppress(Word('Storage format:'))
+    id_storage_format = Word(alphas).setResultsName('storage_format')
+    prefix_format_variant = Suppress(Word('Format variant:'))
+    id_format_variant = Word(alphanums + ' ').setResultsName('format_variant')
+    prefix_location = Suppress(Word('Location:'))
+    id_location = Word(alphanums + ' /.').setResultsName('location')
+
+    hd_info = Group(uuid_prefix + id_uuid + eol + accessible_prefix +
+            id_accessible + eol + logical_size_prefix + id_logical_size + eol +
+            current_size_prefix + id_current_size + eol + type_prefix +
+            id_type + eol + prefix_storage_format + id_storage_format + eol +
+            prefix_format_variant + id_format_variant + eol + prefix_location +
+            id_location + eol)
+    out = hd_info.parseString(txt)[0]
+
+    dict_out = {'uuid': out.uuid, 'accessible': out.accessible,
+            'logical_size': out.logical_size, 'current_size': out.current_size,
+            'type': out.type, 'storage_format': out.storage_format,
+            'format_variant': out.storage_variant, 'location': out.location}
+    return dict_out

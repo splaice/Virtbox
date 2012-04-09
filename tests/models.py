@@ -173,7 +173,13 @@ class ManageShowHDInfoTestCase(testify.TestCase):
 
     def test_showhdinfo_by_filename(self):
         hd_info = Manage.showhdinfo(uuid=self.hd_filename)
-        print hd_info
+        logical_size = '%s MBytes' % self.hd_size
+        testify.assert_equal(hd_info['logical_size'], logical_size,
+                'logical size mismatch')
+        testify.assert_equal(hd_info['location'], self.hd_filename,
+                'filename/location mismatch')
+        testify.assert_equal(hd_info['storage_format'], self.hd_format,
+                'storage format mismatch')
 
 
 #class ManageCloseMediumTestCase(testify.TestCase):
