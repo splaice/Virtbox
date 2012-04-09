@@ -211,3 +211,29 @@ def parse_showvminfo(txt):
             dict_out[k] = v.strip('"')
 
     return dict_out
+
+
+def parse_createhd(txt):
+    """
+    Disk image created. UUID: 0ab4081c-f383-4ba0-96df-ed7b4ed2d791
+    """
+
+    uuid_prefix = Suppress(Word('Disk image created. UUID:'))
+    id_uuid = Word(alphanums + '-').setResultsName('uuid')
+    hd_info = Group(uuid_prefix + id_uuid)
+    out = hd_info.parseString(txt)[0]
+    dict_out = {'uuid': out.uuid}
+
+    return dict_out
+
+
+def parse_unregistervm(txt):
+    return txt
+
+
+def parse_closemedium(txt):
+    return txt
+
+
+def parse_showhdinfo(txt):
+    return txt

@@ -7,6 +7,7 @@ This module contains the unit tests for the models module.
 """
 
 import testify
+import os
 from virtbox.models import Manage
 
 
@@ -56,11 +57,11 @@ class ManageUnregisterTestCase(testify.TestCase):
 
     def test_unregistervm_by_name(self):
         vm_info = Manage.unregistervm(name=self.vm_name, delete=True)
-        testify.assert_equal(vm_info, True, 'returned False')
+        testify.assert_equal(vm_info, '', 'returned non-empty string')
 
     def test_unregistervm_by_uuid(self):
         vm_info = Manage.unregistervm(uuid=self.vm_info['uuid'], delete=True)
-        testify.assert_equal(vm_info, True, 'returned False')
+        testify.assert_equal(vm_info, '', 'returned non-empty string')
 
 
 class ManageListVMSTestCase(testify.TestCase):
@@ -133,6 +134,26 @@ class ManageShowVMInfoTestCase(testify.TestCase):
         vm_details = Manage.showvminfo(name=self.vm_info['uuid'])
         testify.assert_equal(vm_details['name'], self.vm_info['name'])
         testify.assert_equal(vm_details['uuid'], self.vm_info['uuid'])
+
+
+class ManageCreateHDTestCase(testify.TestCase):
+    @testify.setup
+    def setup_hd_info(self):
+        self.hd_size = '128'
+        self.hd_format = 'VDI'
+        self.hd_variant = 'Standard'
+        self.hd_filename = '/tmp/test.vdi'
+
+    @testify.teardown
+    def destory_hdd(self):
+        os.remove(self.hd_filename)
+
+    def test_createhd(self):
+        hd_info = Manage.createhd(filename=self.hd_filename, size=self.hd_size,
+                format=self.hd_format, variant=self.hd_variant)
+        testify.assert_equal(len(hd_info['uuid']), 36, 'uuid len is off')
+        testify.assert_equal(os.path.exists(self.hd_filename), True,
+                'created file does not exist')
 
 
 class ManageListOsTypes(testify.TestCase):
