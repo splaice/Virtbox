@@ -9,7 +9,8 @@ This module contains the primary objects that power virtbox.
 import envoy
 from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
     VirtboxCommandNotImplemented)
-from .utils import parse_list_vms, parse_list_ostypes, parse_createvm
+from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
+        parse_showvminfo)
 
 
 class Manage(object):
@@ -68,7 +69,21 @@ class Manage(object):
 
     @classmethod
     def showvminfo(cls, name=None, uuid=None, log=False):
-        pass
+        _cmd = '%s showvminfo --machinereadable --details' % cls.cmd
+
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif name:
+            _cmd = '%s %s' % (_cmd, name)
+        else:
+            raise VirtboxManageError(reason="name or uuid argument required")
+
+        r = envoy.run(_cmd)
+        if r.status_code:
+            raise VirtboxCommandError(status_code=r.status_code, cmd=_cmd,
+                    stdout=r.std_out, stderr=r.std_err)
+
+        return parse_showvminfo(r.std_out)
 
     @classmethod
     def _list(cls, arg):

@@ -63,7 +63,7 @@ class ManageUnregisterTestCase(testify.TestCase):
         testify.assert_equal(vm_info, True, 'returned False')
 
 
-class ManageListVMS(testify.TestCase):
+class ManageListVMSTestCase(testify.TestCase):
     @testify.setup
     def setup_vm(self):
         self.ostype = 'Linux'
@@ -81,7 +81,7 @@ class ManageListVMS(testify.TestCase):
         testify.assert_gt(len(vm_info['uuid']), 0, 'no uuid set')
 
 
-class ManageListVMSMany(testify.TestCase):
+class ManageListVMSManyTestCase(testify.TestCase):
     @testify.setup
     def setup_vm(self):
         self.ostype = 'Linux'
@@ -113,6 +113,26 @@ class ManageListVMSMany(testify.TestCase):
         vm_info2 = Manage.list_vms()[2]
         testify.assert_equal(vm_info2['name'], self.vm2_name, 'name mismatch')
         testify.assert_gt(len(vm_info2['uuid']), 0, 'no uuid set')
+
+
+class ManageShowVMInfoTestCase(testify.TestCase):
+    @testify.setup
+    def create_vm(self):
+        self.vm_info = Manage.createvm(name='taco')
+
+    @testify.teardown
+    def destroy_vm(self):
+        Manage.unregistervm(name=self.vm_info['name'], delete=True)
+
+    def test_showvminfo_by_name(self):
+        vm_details = Manage.showvminfo(name=self.vm_info['name'])
+        testify.assert_equal(vm_details['name'], self.vm_info['name'])
+        testify.assert_equal(vm_details['uuid'], self.vm_info['uuid'])
+
+    def test_showvminfo_by_uuid(self):
+        vm_details = Manage.showvminfo(name=self.vm_info['uuid'])
+        testify.assert_equal(vm_details['name'], self.vm_info['name'])
+        testify.assert_equal(vm_details['uuid'], self.vm_info['uuid'])
 
 
 class ManageListOsTypes(testify.TestCase):
