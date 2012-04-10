@@ -89,6 +89,78 @@ class Manage(object):
         return parse_showvminfo(stdout)
 
     @classmethod
+    def modifyvm(cls, name=None, uuid=None, new_name=None, ostype=None,
+            memory=None, pagefusion=None, vram=None, acpi=None,
+            pciattach=None, pcidetach=None, ioapic=None, pae=None, hpet=None,
+            hwvirtex=None, hwvirtexexcl=None, nestedpaging=None,
+            largepages=None, vtxvpid=None, synthcpu=None, cpuidset=None,
+            cpuidremove=None, cpuidremoveall=False, hardwareuuid=None,
+            cpus=None, cpuhotplug=None, cpuexectioncap=None, rtcuseutc=None,
+            monitorcount=None, acclerate3d=None, accelerate2dvideo=None,
+            firmware=None, chipset=None, bioslogofadein=None,
+            bioslogofadeout=None, bioslogodisplaytime=None,
+            bioslogoimagepath=None, biosbootmenu=None,
+            biossystemtimeoffset=None, biospxedebug=None, boot1=None,
+            boot2=None, boot3=None, boot4=None, nic1=None, nic2=None,
+            nic3=None, nic4=None, nic5=None, nic6=None, nic7=None,
+            nictype1=None, nictype2=None, nictype3=None, nictype4=None,
+            nictype5=None, nictype6=None, nictype7=None, cabelconnected1=None,
+            cabelconnected2=None, cabelconnected3=None, cabelconnected4=None,
+            cabelconnected5=None, cabelconnected6=None, cabelconnected7=None,
+            nictrace1=None, nictrace2=None, nictrace3=None, nictrace4=None,
+            nictrace5=None, nictrace6=None, nictrace7=None, nictracefile1=None,
+            nictracefile2=None, nictracefile3=None, nictracefile4=None,
+            nictracefile5=None, nictracefile6=None, nictracefile7=None,
+            nicproperty1=None, nicproperty2=None, nicproperty3=None,
+            nicproperty4=None, nicproperty5=None, nicproperty6=None,
+            nicproperty7=None, nicspeed1=None, nicspeed2=None, nicspeed3=None,
+            nicspeed4=None, nicspeed5=None, nicspeed6=None, nicspeed7=None,
+            nicbootprio1=None, nicbootprio2=None, nicbootprio3=None,
+            nicbootprio4=None, nicbootprio5=None, nicbootprio6=None,
+            nicbootprio7=None, nicpromisc1=None, nicpromisc2=None,
+            nicpromisc3=None, nicpromisc4=None, nicpromisc5=None,
+            nicpromisc6=None, nicpromisc7=None,
+            nicbandwidthgroup1=None, nicbandwidthgroup2=None,
+            nicbandwidthgroup3=None, nicbandwidthgroup4=None,
+            nicbandwidthgroup5=None, nicbandwidthgroup6=None,
+            nicbandwidthgroup7=None, bridgeadapter1=None, bridgeadapter2=None,
+            bridgeadapter3=None, bridgeadapter4=None, bridgeadapter5=None,
+            bridgeadapter6=None, bridgeadapter7=None,
+            hostonlyadapter1=None, hostonlyadapter2=None,
+            hostonlyadapter3=None, hostonlyadapter4=None,
+            hostonlyadapter5=None, hostonlyadapter6=None,
+            hostonlyadapter7=None, intnet1=None, intnet2=None, intnet3=None,
+            intnet4=None, intnet5=None, intnet6=None, intnet7=None,
+            natnet1=None, natnet2=None, natnet3=None, natnet4=None,
+            natnet5=None, natnet6=None, natnet7=None,
+            nicgenericdrv1=None, nicgenericdrv2=None, nicgenericdrv3=None,
+            nicgenericdrv4=None, nicgenericdrv5=None, nicgenericdrv6=None,
+            nicgenericdrv7=None, netsettings1=None, netsettings2=None,
+            netsettings3=None, netsettings4=None, netsettings5=None,
+            netsettings6=None, netsettings7=None, natpf1=None, natpf2=None,
+            natpf3=None, natpf4=None, natpf5=None, natpf6=None, natpf7=None,
+            nattftpprefix1=None, nattftpprefix2=None, nattftpprefix3=None,
+            nattftpprefix4=None, nattftpprefix5=None, nattftpprefix6=None,
+            nattftpprefix7=None, nattftpfile1=None, nattftpfile2=None,
+            nattftpfile3=None, nattftpfile4=None, nattftpfile5=None,
+            nattftpfile6=None, nattftpfile7=None, nattftpserver1=None,
+            nattftpserver2=None, nattftpserver3=None, nattftpserver4=None,
+            nattftpserver5=None, nattftpserver6=None, nattftpserver7=None,
+            natbindip1=None, natbindip2=None, natbindip3=None, natbindip4=None,
+            natbindip5=None, natbindip6=None, natbindip7=None,
+            ):
+        _cmd = '%s modifyvm' % cls.cmd
+
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif name:
+            _cmd = '%s %s' % (_cmd, name)
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_showvminfo(stdout)
+
+
+    @classmethod
     def createhd(cls, filename=None, size=None, sizebytes=None, format=None,
             variant=None):
         _cmd = '%s createhd' % cls.cmd
