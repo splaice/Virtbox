@@ -8,7 +8,7 @@ This module contains the primary objects that power virtbox.
 
 import envoy
 from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
-    VirtboxCommandNotImplemented)
+    VirtboxCommandNotImplemented, VirtboxMissingArgument)
 from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
         parse_showvminfo, parse_createhd, parse_unregistervm,
         parse_showhdinfo, parse_closemedium, parse_modifyvm)
@@ -16,6 +16,9 @@ from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
 HD_FORMATS = ('VDI', 'VMDK', 'VHD', 'RAW')
 HD_VARIANTS = ('Standard', 'Fixed', 'Split2G', 'Stream', 'ESX')
 MEDIUM_TYPES = ('disk', 'dvd', 'floppy')
+STORAGECTL_TYPES = ('ide', 'sata', 'scsi', 'floppy', 'sas')
+STORAGECTL_CONTROLLERS = ('LSILogic', 'LSILogicSAS', 'BusLogic', 'IntelAHCI',
+    'PIIX3', 'PIIX4', 'ICH6', 'I82078')
 
 
 class Manage(object):
@@ -221,6 +224,67 @@ class Manage(object):
 
         stdout, stderr = cls._run_cmd(_cmd)
         return parse_showhdinfo(stdout)
+
+    @classmethod
+    def modifyhd(cls, filename=None):
+        raise VirtboxCommandNotImplemented(reason="not needed at this time")
+
+    @classmethod
+    def storagectl_add(cls, uuid=None, vmname=None, name=None, ctl_type=None,
+            controller=None, sataideemulation1=None, sataideemulation2=None,
+            sataideemulation3=None, sataideemulation4=None,  hostiocache=None,
+            bootable=False):
+        _cmd = '%s storagectl' % cls.cmd
+
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif vmname:
+            _cmd = '%s %s' % (_cmd, vmname)
+
+        if name:
+            _cmd = '%s --name %s' % (_cmd, name)
+        else:
+            raise VirtboxMissingParameter("kwarg name is required.")
+
+        if ctl_type:
+            if ctl_type not in STORAGECTL_TYPES:
+                raise VirtboxManageError(
+                        reason='unsupported ctl_type provided')
+            else:
+                _cmd = '%s --add %s' % (_cmd, ctl_type)
+
+        if controller:
+            if controller not in STORAGECTL_CONTROLLERS:
+                raise VirtboxManageError(
+                        reason='unsupported controller ctl_type provided')
+            else:
+                _cmd = '%s --controller %s' % (_cmd, controller)
+
+        if sataideemulation1:
+            _cmd = '%s --sataideemulation1 %d' % (_cmd, sataideemulation1)
+
+        if sataideemulation2:
+            _cmd = '%s --sataideemulation2 %d' % (_cmd, sataideemulation2)
+
+        if sataideemulation3:
+            _cmd = '%s --sataideemulation3 %d' % (_cmd, sataideemulation3)
+
+        if sataideemulation4:
+            _cmd = '%s --sataideemulation4 %d' % (_cmd, sataideemulation4)
+
+        if hostiocache:
+            _cmd = '%s --hostiocache %s' % (_cmd, hostiocache)
+
+        if bootable:
+            _cmd = '%s --bootable %s' % (_cmd, bootable)
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_showhdinfo(stdout)
+
+    @classmethod
+    def storagectl_remove(cls, uuid=None, vmname=None, name=None):
+        pass
+        # TODO: finish me
 
     @classmethod
     def closemedium(cls, medium_type=None, uuid=None, filename=None,
