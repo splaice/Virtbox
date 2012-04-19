@@ -202,3 +202,36 @@ class ManageShowHDInfoTestCase(testify.TestCase):
 class ManageListOsTypes(testify.TestCase):
     """Incomplete
     """
+
+
+class ManageModifyVMTestCase(testify.TestCase):
+    """ Incomplete in the sense that I don't want to write tests for every
+        option at this point.
+    """
+    @testify.setup
+    def setup_createvm(self):
+        self.vm_name = 'foobarz'
+        self.vm_new_name = 'foobart'
+        self.vm_ostype = 'Linux'
+        self.vm_info = Manage.createvm(name=self.vm_name,
+                ostype=self.vm_ostype)
+
+    def test_modifyvm_new_name_by_name(self):
+        testify.assert_equal(self.vm_name, self.vm_info['name'])
+
+        Manage.modifyvm(name=self.vm_name, new_name=self.vm_new_name)
+        vm_info = Manage.showvminfo(uuid=self.vm_info['uuid'])
+
+        testify.assert_equal(self.vm_new_name, vm_info['name'])
+
+    def test_modifyvm_new_name_by_uuid(self):
+        testify.assert_equal(self.vm_name, self.vm_info['name'])
+
+        Manage.modifyvm(uuid=self.vm_info['uuid'], new_name=self.vm_new_name)
+        vm_info = Manage.showvminfo(uuid=self.vm_info['uuid'])
+
+        testify.assert_equal(self.vm_new_name, vm_info['name'])
+
+    @testify.teardown
+    def destroy_vm(self):
+        Manage.unregistervm(name=self.vm_info['uuid'], delete=True)
