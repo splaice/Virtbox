@@ -136,6 +136,32 @@ class ManageShowVMInfoTestCase(testify.TestCase):
         testify.assert_equal(vm_details['uuid'], self.vm_info['uuid'])
 
 
+class ManageCreateStorageCTLTestCase(testify.TestCase):
+    @testify.setup
+    def create_vm(self):
+        self.vm_info = Manage.createvm(name='taco')
+
+    @testify.teardown
+    def destroy_vm(self):
+        Manage.unregistervm(name=self.vm_info['name'], delete=True)
+
+    def test_create_storagectl_by_name(self):
+        out = Manage.storagectl_add(vmname=self.vm_info['name'],
+                name='primary', ctl_type='scsi', controller='LSILogic')
+        testify.assert_equal(out, '')
+        out = Manage.storagectl_remove(vmname=self.vm_info['name'],
+                name='primary')
+        testify.assert_equal(out, '')
+
+    def test_create_storagectl_by_uuid(self):
+        out = Manage.storagectl_add(vmname=self.vm_info['uuid'],
+                name='primary', ctl_type='scsi', controller='LSILogic')
+        testify.assert_equal(out, '')
+        out = Manage.storagectl_remove(vmname=self.vm_info['uuid'],
+                name='primary')
+        testify.assert_equal(out, '')
+
+
 class ManageCreateHDTestCase(testify.TestCase):
     @testify.setup
     def setup_hd_info(self):
