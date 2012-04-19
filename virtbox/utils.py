@@ -146,3 +146,11 @@ def parse_showhdinfo(txt):
 
 def parse_modifyvm(txt):
     return txt
+
+
+def parse_storagectl_add(txt):
+    return txt
+
+
+def parse_storagectl_remove(txt):
+    return txt

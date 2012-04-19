@@ -19,6 +19,7 @@ class VirtboxMissingArgument(VirtboxError):
     """ This is an error when a method is called missing a required parameter.
     """
 
+
 class VirtboxManageError(VirtboxError):
     """ This is an error specific to the use of the Manage class.
     """

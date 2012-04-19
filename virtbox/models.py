@@ -11,7 +11,8 @@ from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
     VirtboxCommandNotImplemented, VirtboxMissingArgument)
 from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
         parse_showvminfo, parse_createhd, parse_unregistervm,
-        parse_showhdinfo, parse_closemedium, parse_modifyvm)
+        parse_showhdinfo, parse_closemedium, parse_modifyvm,
+        parse_storagectl_add, parse_storagectl_remove)
 
 HD_FORMATS = ('VDI', 'VMDK', 'VHD', 'RAW')
 HD_VARIANTS = ('Standard', 'Fixed', 'Split2G', 'Stream', 'ESX')
@@ -244,7 +245,7 @@ class Manage(object):
         if name:
             _cmd = '%s --name %s' % (_cmd, name)
         else:
-            raise VirtboxMissingParameter("kwarg name is required.")
+            raise VirtboxMissingArgument("kwarg name is required.")
 
         if ctl_type:
             if ctl_type not in STORAGECTL_TYPES:
@@ -279,12 +280,24 @@ class Manage(object):
             _cmd = '%s --bootable %s' % (_cmd, bootable)
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_showhdinfo(stdout)
+        return parse_storagectl_add(stdout)
 
     @classmethod
     def storagectl_remove(cls, uuid=None, vmname=None, name=None):
-        pass
-        # TODO: finish me
+        _cmd = '%s storagectl' % cls.cmd
+
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif vmname:
+            _cmd = '%s %s' % (_cmd, vmname)
+
+        if name:
+            _cmd = '%s --name %s --remove' % (_cmd, name)
+        else:
+            raise VirtboxMissingArgument("kwarg name is required.")
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_storagectl_remove(stdout)
 
     @classmethod
     def closemedium(cls, medium_type=None, uuid=None, filename=None,
