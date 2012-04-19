@@ -10,8 +10,8 @@ import envoy
 from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
     VirtboxCommandNotImplemented)
 from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
-        parse_showvminfo, parse_createhd, parse_unregistervm, parse_showhdinfo,
-        parse_closemedium)
+        parse_showvminfo, parse_createhd, parse_unregistervm,
+        parse_showhdinfo, parse_closemedium, parse_modifyvm)
 
 HD_FORMATS = ('VDI', 'VMDK', 'VHD', 'RAW')
 HD_VARIANTS = ('Standard', 'Fixed', 'Split2G', 'Stream', 'ESX')
@@ -148,7 +148,29 @@ class Manage(object):
             nattftpserver5=None, nattftpserver6=None, nattftpserver7=None,
             natbindip1=None, natbindip2=None, natbindip3=None, natbindip4=None,
             natbindip5=None, natbindip6=None, natbindip7=None,
-            ):
+            natdnspassdomain1=None, natdnspassdomain2=None,
+            natdnspassdomain3=None, natdnspassdomain4=None,
+            natdnspassdomain5=None, natdnspassdomain6=None,
+            natdnspassdomain7=None, natdnsproxy1=None, natdnsproxy2=None,
+            natdnsproxy3=None, natdnsproxy4=None, natdnsproxy5=None,
+            natdnsproxy6=None, natdnsproxy7=None, natdnshostresolver1=None,
+            natdnshostresolver2=None, natdnshostresolver3=None,
+            natdnshostresolver4=None, natdnshostresolver5=None,
+            natdnshostresolver6=None, natdnshostresolver7=None,
+            nataliasmode1=None, nataliasmode2=None, nataliasmode3=None,
+            nataliasmode4=None, nataliasmode5=None, nataliasmode6=None,
+            nataliasmode7=None, macaddress1=None, macaddress2=None,
+            macaddress3=None, macaddress4=None, macaddress5=None,
+            macaddress6=None, macaddress7=None, mouse=None, keyboard=None,
+            uart1=None, uart2=None, uartmode1=None, uartmode2=None,
+            guestmemoryballon=None, gueststatisticsinterval=None,
+            audio=None, audiocontroller=None, clipboard=None, vrde=None,
+            vrdeextpack=None, vrdeproperty=None, vrdeport=None,
+            vrdeaddress=None, vrdeauthtype=None, vrdeauthlibrary=None,
+            vrdemulticon=None, vrdereusecon=None, vrdevideochannel=None,
+            vrdevideochannelquality=None, usb=None, usbehci=None,
+            snapshotfolder=None, teleporter=None, teleporterport=None,
+            teleporteraddress=None, teleporterpassword=None):
         _cmd = '%s modifyvm' % cls.cmd
 
         if uuid:
@@ -156,9 +178,11 @@ class Manage(object):
         elif name:
             _cmd = '%s %s' % (_cmd, name)
 
-        stdout, stderr = cls._run_cmd(_cmd)
-        return parse_showvminfo(stdout)
+        if new_name:
+            _cmd = '%s --name %s' % (_cmd, new_name)
 
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_modifyvm(stdout)
 
     @classmethod
     def createhd(cls, filename=None, size=None, sizebytes=None, format=None,

@@ -202,3 +202,25 @@ class ManageShowHDInfoTestCase(testify.TestCase):
 class ManageListOsTypes(testify.TestCase):
     """Incomplete
     """
+
+
+class ManageModifyVMTestCase(testify.TestCase):
+    @testify.setup
+    def setup_createvm(self):
+        self.vm_name = 'foobarz'
+        self.vm_new_name = 'foobart'
+        self.vm_ostype = 'Linux'
+        self.vm_info = Manage.createvm(name=self.vm_name,
+                ostype=self.vm_ostype)
+
+    def test_modifyvm_new_name_by_name(self):
+        testify.assert_equal(self.vm_name, self.vm_info['name'])
+
+        Manage.modifyvm(name=self.vm_name, new_name=self.vm_new_name)
+        vm_info = Manage.showvminfo(uuid=self.vm_info['uuid'])
+
+        testify.assert_equal(self.vm_new_name, vm_info['name'])
+
+    @testify.teardown
+    def destroy_vm(self):
+        Manage.unregistervm(name=self.vm_info['uuid'], delete=True)
