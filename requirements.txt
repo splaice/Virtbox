@@ -6,4 +6,3 @@ clint
 pyparsing
 sqlalchemy
 PyYAML
-Mock
