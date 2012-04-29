@@ -209,7 +209,7 @@ class ManageCreateHDTestCase(testify.TestCase):
         try:
             hd_uuid = uuid.UUID('{%s}' % hd_info['uuid'])
         except:
-            logger.error('fucked up uuid? %r' % hd_uuid)
+            logger.error('fucked up uuid? %r' % hd_info)
             raise
         testify.assert_equal(type(hd_uuid), type(uuid.uuid4()), 'no uuid set')
         testify.assert_equal(os.path.exists(self.hd_filename), True,
@@ -236,20 +236,20 @@ class ManageShowHDInfoTestCase(testify.TestCase):
                 'storage format mismatch')
 
 
-#class ManageCloseMediumTestCase(testify.TestCase):
-#    @testify.setup
-#    def create_hd(self):
-#        self.hd_size = '128'
-#        self.hd_format = 'VDI'
-#        self.hd_variant = 'Standard'
-#        self.hd_filename = '/tmp/test.vdi'
-#        self.hd_info = Manage.createhd(filename=self.hd_filename,
-#                size=self.hd_size, format=self.hd_format,
-#                variant=self.hd_variant)
-#
-#    def test_closemedium_disk_by_uuid_with_delete(self):
-#       out = Manage.closemedium(medium_type='disk', uuid=self.hd_info['uuid'],
-#                delete=True)
+class ManageCloseMediumTestCase(testify.TestCase):
+    @testify.setup
+    def setup(self):
+        self.vm = generate_vm()
+        self.hdd = generate_hd()
+
+    @testify.teardown
+    def teardown(self):
+        delete_hd(**self.hdd)
+        delete_vm(**self.vm)
+
+#    def test_closemedium_disk_by_filename(self):
+#        out = Manage.closemedium(medium_type='disk',
+#                filename=self.hdd['filename'], delete=True)
 #        print out
 
 
@@ -268,6 +268,10 @@ class ManageModifyVMTestCase(testify.TestCase):
         self.new_name = 'bar'
         self.vm = generate_vm(name=self.name)
 
+    @testify.teardown
+    def destroy_vm(self):
+        delete_vm(**self.vm)
+
     def test_modifyvm_new_name_by_name(self):
         testify.assert_equal(self.name, self.vm['name'])
 
@@ -283,10 +287,6 @@ class ManageModifyVMTestCase(testify.TestCase):
         vm_info = Manage.showvminfo(uuid=self.vm['uuid'])
 
         testify.assert_equal(self.new_name, vm_info['name'])
-
-    @testify.teardown
-    def destroy_vm(self):
-        delete_vm(**self.vm)
 
 
 class ManageVersionTestCase(testify.TestCase):
