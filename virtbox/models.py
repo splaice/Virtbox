@@ -20,6 +20,9 @@ MEDIUM_TYPES = ('disk', 'dvd', 'floppy')
 STORAGECTL_TYPES = ('ide', 'sata', 'scsi', 'floppy', 'sas')
 STORAGECTL_CONTROLLERS = ('LSILogic', 'LSILogicSAS', 'BusLogic', 'IntelAHCI',
     'PIIX3', 'PIIX4', 'ICH6', 'I82078')
+STORAGE_TYPES = ('dvddrive', 'hdd', 'fdd')
+STORAGE_MTYPES = ('normal', 'writethrough', 'immutable', 'shareable',
+    'readonly', 'multiattach')
 
 
 class Manage(object):
@@ -298,6 +301,126 @@ class Manage(object):
 
         stdout, stderr = cls._run_cmd(_cmd)
         return parse_storagectl_remove(stdout)
+
+    @classmethod
+    def storageattach(cls, uuid=None, vmname=None, name=None, port=None,
+            device=None, storage_type=None, medium=None, mtype=None,
+            comment=None, setuuid=None, setparentuuid=None, passthrough=None,
+            tempeject=None, nonrotational=None, bandwidthgroup=None,
+            forceunmount=False, server=None, target=None, tport=None, lun=None,
+            encodedlun=None, username=None, password=None, intnet=None):
+        """
+            VBoxManage storageattach    <uuid|vmname>
+                            --storagectl <name>
+                            [--port <number>]
+                            [--device <number>]
+                            [--type dvddrive|hdd|fdd]
+                            [--medium none|emptydrive|
+                                      <uuid>|<filename>|host:<drive>|iscsi]
+                            [--mtype normal|writethrough|immutable|shareable|
+                                     readonly|multiattach]
+                            [--comment <text>]
+                            [--setuuid <uuid>]
+                            [--setparentuuid <uuid>]
+                            [--passthrough on|off]
+                            [--tempeject on|off]
+                            [--nonrotational on|off]
+                            [--bandwidthgroup <name>]
+                            [--forceunmount]
+                            [--server <name>|<ip>]
+                            [--target <target>]
+                            [--tport <port>]
+                            [--lun <lun>]
+                            [--encodedlun <lun>]
+                            [--username <username>]
+                            [--password <password>]
+                            [--intnet]
+        """
+        _cmd = '%s storageattach' % cls.cmd
+
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif vmname:
+            _cmd = '%s %s' % (_cmd, vmname)
+
+        if name:
+            _cmd = '%s --storagectl %s' % (_cmd, name)
+        else:
+            raise VirtboxMissingArgument("kwarg name is required.")
+
+        if port:
+            _cmd = '%s --port %s' % (_cmd, port)
+
+        if device:
+            _cmd = '%s --device %s' % (_cmd, device)
+
+        if storage_type:
+            if storage_type not in STORAGE_TYPES:
+                raise VirtboxManageError(
+                        reason='unsupported storage_type provided')
+
+            _cmd = '%s --type %s' % (_cmd, storage_type)
+
+        if medium:
+            _cmd = '%s --medium %s' % (_cmd, medium)
+
+        if mtype:
+            if mtype not in STORAGE_MTYPES:
+                raise VirtboxManageError(
+                        reason='unsupported storage_type provided')
+
+            _cmd = '%s --mtype %s' % (_cmd, type)
+
+        if comment:
+            _cmd = '%s --comment %s' % (_cmd, comment)
+
+        if setuuid:
+            _cmd = '%s --setuuid %s' % (_cmd, setuuid)
+
+        if setparentuuid:
+            _cmd = '%s --setparentuuid %s' % (_cmd, setparentuuid)
+
+        if passthrough:
+            _cmd = '%s --passthrough %s' % (_cmd, passthrough)
+
+        if tempeject:
+            _cmd = '%s --tempeject %s' % (_cmd, tempeject)
+
+        if nonrotational:
+            _cmd = '%s --nonrotational %s' % (_cmd, nonrotational)
+
+        if bandwidthgroup:
+            _cmd = '%s --bandwidthgroup %s' % (_cmd, bandwidthgroup)
+
+        if forceunmount:
+            _cmd = '%s --forceunmount' % _cmd
+
+        if server:
+            _cmd = '%s --server %s' % (_cmd, server)
+
+        if target:
+            _cmd = '%s --target %s' % (_cmd, target)
+
+        if tport:
+            _cmd = '%s --tport %s' % (_cmd, tport)
+
+        if lun:
+            _cmd = '%s --lun %s' % (_cmd, lun)
+
+        if encodedlun:
+            _cmd = '%s --encodedlun %s' % (_cmd, encodedlun)
+
+        if username:
+            _cmd = '%s --username %s' % (_cmd, username)
+
+        if password:
+            _cmd = '%s --password %s' % (_cmd, password)
+
+        if intnet:
+            _cmd = '%s --intnet' % _cmd
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_closemedium(stdout)
 
     @classmethod
     def closemedium(cls, medium_type=None, uuid=None, filename=None,
