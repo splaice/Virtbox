@@ -8,6 +8,12 @@ This module contains the set of bootstrap's exceptions
 
 """
 
+import logging
+
+
+# setup module level logger
+logger = logging.getLogger(__name__)
+
 
 class VirtboxError(Exception):
     """ This is an ambiguous error that occured.

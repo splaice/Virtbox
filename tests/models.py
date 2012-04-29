@@ -6,12 +6,18 @@ This module contains the unit tests for the models module.
 :license: ISC, see LICENSE for more details.
 """
 
-import testify
 import os
+import logging
+import testify
 import uuid
+
 from virtbox.models import Manage
 from .utils import (id_generator, generate_vm, delete_vm, generate_hd,
         delete_hd, generate_ctl, delete_ctl)
+
+
+# setup module level logger
+logger = logging.getLogger(__name__)
 
 
 class ManageCreateTestCase(testify.TestCase):
@@ -199,8 +205,13 @@ class ManageCreateHDTestCase(testify.TestCase):
     def test_createhd(self):
         hd_info = Manage.createhd(filename=self.hd_filename, size=self.hd_size,
                 format=self.hd_format, variant=self.hd_variant)
-        vm_uuid = uuid.UUID('{%s}' % hd_info['uuid'])
-        testify.assert_equal(type(vm_uuid), type(uuid.uuid4()), 'no uuid set')
+        # TODO: remove once we figure out why we get a bad uuid returned
+        try:
+            hd_uuid = uuid.UUID('{%s}' % hd_info['uuid'])
+        except:
+            logger.error('fucked up uuid? %r' % hd_uuid)
+            raise
+        testify.assert_equal(type(hd_uuid), type(uuid.uuid4()), 'no uuid set')
         testify.assert_equal(os.path.exists(self.hd_filename), True,
                 'created file does not exist')
 

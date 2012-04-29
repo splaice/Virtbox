@@ -21,7 +21,10 @@ env/.pip: env cfg/requirements.txt
 	touch env/.pip
 
 test: pep8 pyflakes env/.pip nuke
-	sudo su virtbox -c "bin/virtual-env-exec testify tests"
+	sudo su virtbox -c 'DEBUG="virtbox" bin/virtual-env-exec testify tests'
+
+test-debug: pep8 pyflakes env/.pip nuke
+	sudo su virtbox -c 'DEBUG="" bin/virtual-env-exec testify tests'
 
 shell:
 	bin/virtual-env-exec ipython

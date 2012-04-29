@@ -6,6 +6,7 @@ This module contains the primary objects that power virtbox.
 :license: ISC, see LICENSE for more details.
 """
 
+import logging
 import envoy
 
 from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
@@ -27,6 +28,10 @@ STORAGE_MTYPES = ('normal', 'writethrough', 'immutable', 'shareable',
     'readonly', 'multiattach')
 
 
+# setup module level logger
+logger = logging.getLogger(__name__)
+
+
 class Manage(object):
     cmd = 'VBoxManage'
 
@@ -34,9 +39,15 @@ class Manage(object):
     def _run_cmd(cls, cmd):
         r = envoy.run(cmd)
         if r.status_code:
+            logger.error('cmd: %s status_code: %d stdout: %s stderr: %s' %
+                    (cmd, r.status_code, r.std_out.replace('\n', ' '),
+                        r.std_err.replace('\n', ' ')))
             raise VirtboxCommandError(status_code=r.status_code, cmd=cmd,
                     stdout=r.std_out, stderr=r.std_err)
 
+        logger.debug('cmd: %s status_code: %d stdout: %s stderr: %s' % (cmd,
+                r.status_code, r.std_out.replace('\n', ' '),
+                r.std_err.replace('\n', ' ')))
         return (r.std_out, r.std_err)
 
     @classmethod

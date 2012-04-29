@@ -6,11 +6,16 @@ This module contains utility functions used in our tests.
 :license: ISC, see LICENSE for more details.
 """
 
+import os
+import logging
 import string
 import random
-import os
 
 from virtbox.models import Manage
+
+
+# setup module level logger
+logger = logging.getLogger(__name__)
 
 
 def id_generator(size=6, chars=string.ascii_lowercase + string.digits):

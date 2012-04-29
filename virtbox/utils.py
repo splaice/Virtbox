@@ -12,9 +12,15 @@ that are also useful for external consumption.
 
 """
 
+import logging
+
 from pyparsing import (Word, alphas, dblQuotedString, alphanums, srange,
                        OneOrMore, Group, Suppress, Literal,
                        LineEnd)
+
+
+# setup module level logger
+logger = logging.getLogger(__name__)
 
 
 def parse_list_vms(txt):
