@@ -7,12 +7,14 @@ This module contains the primary objects that power virtbox.
 """
 
 import envoy
+
 from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
     VirtboxCommandNotImplemented, VirtboxMissingArgument)
 from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
         parse_showvminfo, parse_createhd, parse_unregistervm,
         parse_showhdinfo, parse_closemedium, parse_modifyvm,
-        parse_storagectl_add, parse_storagectl_remove, parse_storageattach)
+        parse_storagectl_add, parse_storagectl_remove, parse_storageattach,
+        parse_version)
 
 HD_FORMATS = ('VDI', 'VMDK', 'VHD', 'RAW')
 HD_VARIANTS = ('Standard', 'Fixed', 'Split2G', 'Stream', 'ESX')
@@ -47,11 +49,13 @@ class Manage(object):
             return r.std_out
 
     @classmethod
-    def version(cls, filename=None):
+    def version(cls):
         """
-        TODO: implement me
         """
-        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+        _cmd = '%s --version' % cls.cmd
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_version(stdout)
 
     @classmethod
     def list_vms(cls):

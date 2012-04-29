@@ -276,3 +276,9 @@ class ManageModifyVMTestCase(testify.TestCase):
     @testify.teardown
     def destroy_vm(self):
         delete_vm(**self.vm)
+
+
+class ManageVersionTestCase(testify.TestCase):
+    def test_version(self):
+        out = Manage.version()
+        testify.assert_equal(bool(out['version']), True)

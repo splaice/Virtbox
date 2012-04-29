@@ -86,9 +86,8 @@ def parse_createhd(txt):
     id_uuid = Word(alphanums + '-').setResultsName('uuid')
     hd_info = Group(uuid_prefix + id_uuid)
     out = hd_info.parseString(txt)[0]
-    dict_out = {'uuid': out.uuid}
 
-    return dict_out
+    return {'uuid': out.uuid}
 
 
 def parse_unregistervm(txt):
@@ -137,11 +136,10 @@ def parse_showhdinfo(txt):
             id_location + eol)
     out = hd_info.parseString(txt)[0]
 
-    dict_out = {'uuid': out.uuid, 'accessible': out.accessible,
+    return {'uuid': out.uuid, 'accessible': out.accessible,
             'logical_size': out.logical_size, 'current_size': out.current_size,
             'type': out.type, 'storage_format': out.storage_format,
             'format_variant': out.storage_variant, 'location': out.location}
-    return dict_out
 
 
 def parse_modifyvm(txt):
@@ -158,3 +156,8 @@ def parse_storagectl_remove(txt):
 
 def parse_storageattach(txt):
     return txt
+
+
+def parse_version(txt):
+    version = txt.rstrip()
+    return {'version': version}
