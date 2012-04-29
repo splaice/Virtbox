@@ -533,16 +533,6 @@ class Manage(object):
             sataideemulation3=None, sataideemulation4=None,  hostiocache=None,
             bootable=False):
         """
-        VBoxManage storagectl       <uuid|vmname>
-                            --name <name>
-                            [--add ide|sata|scsi|floppy|sas]
-                            [--controller LSILogic|LSILogicSAS|BusLogic|
-                                          IntelAHCI|PIIX3|PIIX4|ICH6|I82078]
-                            [--sataideemulation<1-4> <1-30>]
-                            [--sataportcount <1-30>]
-                            [--hostiocache on|off]
-                            [--bootable on|off]
-                            [--remove]
         """
         _cmd = '%s storagectl' % cls.cmd
 
@@ -594,16 +584,6 @@ class Manage(object):
     @classmethod
     def storagectl_remove(cls, uuid=None, vmname=None, name=None):
         """
-        VBoxManage storagectl       <uuid|vmname>
-                            --name <name>
-                            [--add ide|sata|scsi|floppy|sas]
-                            [--controller LSILogic|LSILogicSAS|BusLogic|
-                                          IntelAHCI|PIIX3|PIIX4|ICH6|I82078]
-                            [--sataideemulation<1-4> <1-30>]
-                            [--sataportcount <1-30>]
-                            [--hostiocache on|off]
-                            [--bootable on|off]
-                            [--remove]
         """
         _cmd = '%s storagectl' % cls.cmd
 
@@ -630,7 +610,6 @@ class Manage(object):
     @classmethod
     def showhdinfo(cls, uuid=None, filename=None):
         """
-        VBoxManage showhdinfo       <uuid>|<filename>
         """
         _cmd = '%s showhdinfo' % cls.cmd
 
@@ -646,10 +625,6 @@ class Manage(object):
     def createhd(cls, filename=None, size=None, sizebytes=None, format=None,
             variant=None):
         """
-        VBoxManage createhd         --filename <filename>
-                            --size <megabytes>|--sizebyte <bytes>
-                            [--format VDI|VMDK|VHD] (default: VDI)
-                            [--variant Standard,Fixed,Split2G,Stream,ESX]
         """
         _cmd = '%s createhd' % cls.cmd
 
@@ -677,12 +652,6 @@ class Manage(object):
     @classmethod
     def modifyhd(cls, filename=None):
         """
-        VBoxManage modifyhd         <uuid>|<filename>
-                            [--type normal|writethrough|immutable|shareable|
-                                    readonly|multiattach]
-                            [--autoreset on|off]
-                            [--compact]
-                            [--resize <megabytes>|--resizebyte <bytes>]
         """
         raise VirtboxCommandNotImplemented(reason="not needed at this time")
 
