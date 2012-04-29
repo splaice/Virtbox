@@ -9,7 +9,7 @@ This module contains the primary objects that power virtbox.
 import logging
 import envoy
 
-from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
+from .errors import (VirtboxManageError, VirtboxCommandError,
     VirtboxCommandNotImplemented, VirtboxMissingArgument)
 from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
         parse_showvminfo, parse_createhd, parse_unregistervm,
@@ -51,15 +51,6 @@ class Manage(object):
         return (r.std_out, r.std_err)
 
     @classmethod
-    def _list(cls, arg):
-        _cmd = '%s list %s' % (cls.cmd, arg)
-        r = envoy.run(_cmd)
-        if r.status_code:
-            raise VirtboxError()
-        else:
-            return r.std_out
-
-    @classmethod
     def version(cls):
         """
         """
@@ -70,7 +61,12 @@ class Manage(object):
 
     @classmethod
     def list_vms(cls):
-        return(parse_list_vms(cls._list('vms')))
+        """
+        """
+        _cmd = '%s list vms' % cls.cmd
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_list_vms(stdout)
 
     @classmethod
     def list_runningvms(cls, filename=None):
@@ -81,7 +77,12 @@ class Manage(object):
 
     @classmethod
     def list_ostypes(cls):
-        return(parse_list_ostypes(cls._list('ostypes')))
+        """
+        """
+        _cmd = '%s list ostypes' % cls.cmd
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_list_ostypes(stdout)
 
     @classmethod
     def list_hostdvds(cls, filename=None):
