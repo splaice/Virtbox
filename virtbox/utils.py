@@ -54,7 +54,7 @@ def parse_createvm(txt):
     eol = Suppress(LineEnd())
     single_quote = Suppress(Literal('\''))
     name_prefix = Suppress(Word('Virtual machine'))
-    id_name = Word(alphas).setResultsName('name')
+    id_name = Word(alphanums).setResultsName('name')
     name_postfix = Suppress(Word('is created and registered.'))
     uuid_prefix = Suppress(Word('UUID:'))
     id_vm_uuid = Word(srange("[a-zA-Z0-9_\-]")).setResultsName('uuid')
@@ -153,4 +153,8 @@ def parse_storagectl_add(txt):
 
 
 def parse_storagectl_remove(txt):
+    return txt
+
+
+def parse_storageattach(txt):
     return txt

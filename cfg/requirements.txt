@@ -6,3 +6,5 @@ clint
 pyparsing
 sqlalchemy
 PyYAML
+readline
+ipython
