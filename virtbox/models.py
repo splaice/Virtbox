@@ -12,7 +12,7 @@ from .errors import (VirtboxError, VirtboxManageError, VirtboxCommandError,
 from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
         parse_showvminfo, parse_createhd, parse_unregistervm,
         parse_showhdinfo, parse_closemedium, parse_modifyvm,
-        parse_storagectl_add, parse_storagectl_remove)
+        parse_storagectl_add, parse_storagectl_remove, parse_storageattach)
 
 HD_FORMATS = ('VDI', 'VMDK', 'VHD', 'RAW')
 HD_VARIANTS = ('Standard', 'Fixed', 'Split2G', 'Stream', 'ESX')
@@ -38,8 +38,185 @@ class Manage(object):
         return (r.std_out, r.std_err)
 
     @classmethod
+    def _list(cls, arg):
+        _cmd = '%s list %s' % (cls.cmd, arg)
+        r = envoy.run(_cmd)
+        if r.status_code:
+            raise VirtboxError()
+        else:
+            return r.std_out
+
+    @classmethod
+    def version(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_vms(cls):
+        return(parse_list_vms(cls._list('vms')))
+
+    @classmethod
+    def list_runningvms(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_ostypes(cls):
+        return(parse_list_ostypes(cls._list('ostypes')))
+
+    @classmethod
+    def list_hostdvds(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_hostfloppies(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_bridgedifs(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_hostonlyifs(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_dhcpservers(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_hostinfo(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_hostcpuids(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_hddbackends(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_hdds(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_dvds(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_floppies(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_usbhost(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_usbfilters(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_systemproperties(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def list_extpacks(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def showvminfo(cls, name=None, uuid=None, log=False):
+        """
+        """
+        _cmd = '%s showvminfo --machinereadable --details' % cls.cmd
+
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif name:
+            _cmd = '%s %s' % (_cmd, name)
+        else:
+            raise VirtboxManageError(reason="name or uuid argument required")
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_showvminfo(stdout)
+
+    @classmethod
+    def registervm(cls, filename=None):
+        """
+        """
+        raise VirtboxCommandNotImplemented(reason="not needed at this time")
+
+    @classmethod
+    def unregistervm(cls, name=None, uuid=None, delete=True):
+        """
+        """
+        _cmd = '%s unregistervm' % cls.cmd
+
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif name:
+            _cmd = '%s %s' % (_cmd, name)
+
+        if delete:
+            _cmd = '%s --delete' % _cmd
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_unregistervm(stdout)
+
+    @classmethod
     def createvm(cls, name=None, ostype=None, register=True, basefolder=None,
             uuid=None):
+        """
+        """
         _cmd = '%s createvm' % cls.cmd
         if name:
             _cmd = '%s --name %s' % (_cmd, name)
@@ -61,39 +238,6 @@ class Manage(object):
 
         stdout, stderr = cls._run_cmd(_cmd)
         return parse_createvm(stdout)
-
-    @classmethod
-    def registervm(cls, filename=None):
-        raise VirtboxCommandNotImplemented(reason="not needed at this time")
-
-    @classmethod
-    def unregistervm(cls, name=None, uuid=None, delete=True):
-        _cmd = '%s unregistervm' % cls.cmd
-
-        if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
-        elif name:
-            _cmd = '%s %s' % (_cmd, name)
-
-        if delete:
-            _cmd = '%s --delete' % _cmd
-
-        stdout, stderr = cls._run_cmd(_cmd)
-        return parse_unregistervm(stdout)
-
-    @classmethod
-    def showvminfo(cls, name=None, uuid=None, log=False):
-        _cmd = '%s showvminfo --machinereadable --details' % cls.cmd
-
-        if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
-        elif name:
-            _cmd = '%s %s' % (_cmd, name)
-        else:
-            raise VirtboxManageError(reason="name or uuid argument required")
-
-        stdout, stderr = cls._run_cmd(_cmd)
-        return parse_showvminfo(stdout)
 
     @classmethod
     def modifyvm(cls, name=None, uuid=None, new_name=None, ostype=None,
@@ -178,6 +322,8 @@ class Manage(object):
             vrdevideochannelquality=None, usb=None, usbehci=None,
             snapshotfolder=None, teleporter=None, teleporterport=None,
             teleporteraddress=None, teleporterpassword=None):
+        """
+        """
         _cmd = '%s modifyvm' % cls.cmd
 
         if uuid:
@@ -192,115 +338,83 @@ class Manage(object):
         return parse_modifyvm(stdout)
 
     @classmethod
-    def createhd(cls, filename=None, size=None, sizebytes=None, format=None,
-            variant=None):
-        _cmd = '%s createhd' % cls.cmd
-
-        if filename:
-            _cmd = '%s --filename %s' % (_cmd, filename)
-
-        if sizebytes:
-            _cmd = '%s --sizebytes %s' % (_cmd, sizebytes)
-        elif size:
-            _cmd = '%s --size %s' % (_cmd, size)
-
-        if format:
-            if format not in HD_FORMATS:
-                raise VirtboxManageError(reason='unsupported format provided')
-            _cmd = '%s --format %s' % (_cmd, format)
-
-        if variant:
-            if variant not in HD_VARIANTS:
-                raise VirtboxManageError(reason='unsupported variant provided')
-            _cmd = '%s --variant %s' % (_cmd, variant)
-
-        stdout, stderr = cls._run_cmd(_cmd)
-        return parse_createhd(stdout)
+    def clonevm(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def showhdinfo(cls, uuid=None, filename=None):
-        _cmd = '%s showhdinfo' % cls.cmd
+    def importvm(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def exportvm(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def startvm(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def controlvm(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def discardstate(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def adoptstate(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def snapshot(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def closemedium(cls, medium_type=None, uuid=None, filename=None,
+            delete=False):
+        """
+        """
+        _cmd = '%s closemedium' % cls.cmd
+
+        if medium_type:
+            if medium_type not in MEDIUM_TYPES:
+                raise VirtboxManageError(reason='unsupported medium provided')
+            _cmd = '%s %s' % (_cmd, medium_type)
 
         if uuid:
             _cmd = '%s %s' % (_cmd, uuid)
         elif filename:
             _cmd = '%s %s' % (_cmd, filename)
 
-        stdout, stderr = cls._run_cmd(_cmd)
-        return parse_showhdinfo(stdout)
-
-    @classmethod
-    def modifyhd(cls, filename=None):
-        raise VirtboxCommandNotImplemented(reason="not needed at this time")
-
-    @classmethod
-    def storagectl_add(cls, uuid=None, vmname=None, name=None, ctl_type=None,
-            controller=None, sataideemulation1=None, sataideemulation2=None,
-            sataideemulation3=None, sataideemulation4=None,  hostiocache=None,
-            bootable=False):
-        _cmd = '%s storagectl' % cls.cmd
-
-        if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
-        elif vmname:
-            _cmd = '%s %s' % (_cmd, vmname)
-
-        if name:
-            _cmd = '%s --name %s' % (_cmd, name)
-        else:
-            raise VirtboxMissingArgument("kwarg name is required.")
-
-        if ctl_type:
-            if ctl_type not in STORAGECTL_TYPES:
-                raise VirtboxManageError(
-                        reason='unsupported ctl_type provided')
-            else:
-                _cmd = '%s --add %s' % (_cmd, ctl_type)
-
-        if controller:
-            if controller not in STORAGECTL_CONTROLLERS:
-                raise VirtboxManageError(
-                        reason='unsupported controller ctl_type provided')
-            else:
-                _cmd = '%s --controller %s' % (_cmd, controller)
-
-        if sataideemulation1:
-            _cmd = '%s --sataideemulation1 %d' % (_cmd, sataideemulation1)
-
-        if sataideemulation2:
-            _cmd = '%s --sataideemulation2 %d' % (_cmd, sataideemulation2)
-
-        if sataideemulation3:
-            _cmd = '%s --sataideemulation3 %d' % (_cmd, sataideemulation3)
-
-        if sataideemulation4:
-            _cmd = '%s --sataideemulation4 %d' % (_cmd, sataideemulation4)
-
-        if hostiocache:
-            _cmd = '%s --hostiocache %s' % (_cmd, hostiocache)
-
-        if bootable:
-            _cmd = '%s --bootable %s' % (_cmd, bootable)
+        if delete:
+            _cmd = '%s --delete' % _cmd
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_storagectl_add(stdout)
-
-    @classmethod
-    def storagectl_remove(cls, uuid=None, vmname=None, name=None):
-        _cmd = '%s storagectl' % cls.cmd
-
-        if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
-        elif vmname:
-            _cmd = '%s %s' % (_cmd, vmname)
-
-        if name:
-            _cmd = '%s --name %s --remove' % (_cmd, name)
-        else:
-            raise VirtboxMissingArgument("kwarg name is required.")
-
-        stdout, stderr = cls._run_cmd(_cmd)
-        return parse_storagectl_remove(stdout)
+        return parse_closemedium(stdout)
 
     @classmethod
     def storageattach(cls, uuid=None, vmname=None, name=None, port=None,
@@ -310,31 +424,6 @@ class Manage(object):
             forceunmount=False, server=None, target=None, tport=None, lun=None,
             encodedlun=None, username=None, password=None, intnet=None):
         """
-            VBoxManage storageattach    <uuid|vmname>
-                            --storagectl <name>
-                            [--port <number>]
-                            [--device <number>]
-                            [--type dvddrive|hdd|fdd]
-                            [--medium none|emptydrive|
-                                      <uuid>|<filename>|host:<drive>|iscsi]
-                            [--mtype normal|writethrough|immutable|shareable|
-                                     readonly|multiattach]
-                            [--comment <text>]
-                            [--setuuid <uuid>]
-                            [--setparentuuid <uuid>]
-                            [--passthrough on|off]
-                            [--tempeject on|off]
-                            [--nonrotational on|off]
-                            [--bandwidthgroup <name>]
-                            [--forceunmount]
-                            [--server <name>|<ip>]
-                            [--target <target>]
-                            [--tport <port>]
-                            [--lun <lun>]
-                            [--encodedlun <lun>]
-                            [--username <username>]
-                            [--password <password>]
-                            [--intnet]
         """
         _cmd = '%s storageattach' % cls.cmd
 
@@ -420,42 +509,261 @@ class Manage(object):
             _cmd = '%s --intnet' % _cmd
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_closemedium(stdout)
+        return parse_storageattach(stdout)
 
     @classmethod
-    def closemedium(cls, medium_type=None, uuid=None, filename=None,
-            delete=False):
-        _cmd = '%s closemedium' % cls.cmd
+    def storagectl_add(cls, uuid=None, vmname=None, name=None, ctl_type=None,
+            controller=None, sataideemulation1=None, sataideemulation2=None,
+            sataideemulation3=None, sataideemulation4=None,  hostiocache=None,
+            bootable=False):
+        """
+        VBoxManage storagectl       <uuid|vmname>
+                            --name <name>
+                            [--add ide|sata|scsi|floppy|sas]
+                            [--controller LSILogic|LSILogicSAS|BusLogic|
+                                          IntelAHCI|PIIX3|PIIX4|ICH6|I82078]
+                            [--sataideemulation<1-4> <1-30>]
+                            [--sataportcount <1-30>]
+                            [--hostiocache on|off]
+                            [--bootable on|off]
+                            [--remove]
+        """
+        _cmd = '%s storagectl' % cls.cmd
 
-        if medium_type:
-            if medium_type not in MEDIUM_TYPES:
-                raise VirtboxManageError(reason='unsupported medium provided')
-            _cmd = '%s %s' % (_cmd, medium_type)
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif vmname:
+            _cmd = '%s %s' % (_cmd, vmname)
+
+        if name:
+            _cmd = '%s --name %s' % (_cmd, name)
+        else:
+            raise VirtboxMissingArgument("kwarg name is required.")
+
+        if ctl_type:
+            if ctl_type not in STORAGECTL_TYPES:
+                raise VirtboxManageError(
+                        reason='unsupported ctl_type provided')
+            else:
+                _cmd = '%s --add %s' % (_cmd, ctl_type)
+
+        if controller:
+            if controller not in STORAGECTL_CONTROLLERS:
+                raise VirtboxManageError(
+                        reason='unsupported controller ctl_type provided')
+            else:
+                _cmd = '%s --controller %s' % (_cmd, controller)
+
+        if sataideemulation1:
+            _cmd = '%s --sataideemulation1 %d' % (_cmd, sataideemulation1)
+
+        if sataideemulation2:
+            _cmd = '%s --sataideemulation2 %d' % (_cmd, sataideemulation2)
+
+        if sataideemulation3:
+            _cmd = '%s --sataideemulation3 %d' % (_cmd, sataideemulation3)
+
+        if sataideemulation4:
+            _cmd = '%s --sataideemulation4 %d' % (_cmd, sataideemulation4)
+
+        if hostiocache:
+            _cmd = '%s --hostiocache %s' % (_cmd, hostiocache)
+
+        if bootable:
+            _cmd = '%s --bootable %s' % (_cmd, bootable)
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_storagectl_add(stdout)
+
+    @classmethod
+    def storagectl_remove(cls, uuid=None, vmname=None, name=None):
+        """
+        VBoxManage storagectl       <uuid|vmname>
+                            --name <name>
+                            [--add ide|sata|scsi|floppy|sas]
+                            [--controller LSILogic|LSILogicSAS|BusLogic|
+                                          IntelAHCI|PIIX3|PIIX4|ICH6|I82078]
+                            [--sataideemulation<1-4> <1-30>]
+                            [--sataportcount <1-30>]
+                            [--hostiocache on|off]
+                            [--bootable on|off]
+                            [--remove]
+        """
+        _cmd = '%s storagectl' % cls.cmd
+
+        if uuid:
+            _cmd = '%s %s' % (_cmd, uuid)
+        elif vmname:
+            _cmd = '%s %s' % (_cmd, vmname)
+
+        if name:
+            _cmd = '%s --name %s --remove' % (_cmd, name)
+        else:
+            raise VirtboxMissingArgument("kwarg name is required.")
+
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_storagectl_remove(stdout)
+
+    @classmethod
+    def bandwidthctl(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def showhdinfo(cls, uuid=None, filename=None):
+        """
+        VBoxManage showhdinfo       <uuid>|<filename>
+        """
+        _cmd = '%s showhdinfo' % cls.cmd
 
         if uuid:
             _cmd = '%s %s' % (_cmd, uuid)
         elif filename:
             _cmd = '%s %s' % (_cmd, filename)
 
-        if delete:
-            _cmd = '%s --delete' % _cmd
+        stdout, stderr = cls._run_cmd(_cmd)
+        return parse_showhdinfo(stdout)
+
+    @classmethod
+    def createhd(cls, filename=None, size=None, sizebytes=None, format=None,
+            variant=None):
+        """
+        VBoxManage createhd         --filename <filename>
+                            --size <megabytes>|--sizebyte <bytes>
+                            [--format VDI|VMDK|VHD] (default: VDI)
+                            [--variant Standard,Fixed,Split2G,Stream,ESX]
+        """
+        _cmd = '%s createhd' % cls.cmd
+
+        if filename:
+            _cmd = '%s --filename %s' % (_cmd, filename)
+
+        if sizebytes:
+            _cmd = '%s --sizebytes %s' % (_cmd, sizebytes)
+        elif size:
+            _cmd = '%s --size %s' % (_cmd, size)
+
+        if format:
+            if format not in HD_FORMATS:
+                raise VirtboxManageError(reason='unsupported format provided')
+            _cmd = '%s --format %s' % (_cmd, format)
+
+        if variant:
+            if variant not in HD_VARIANTS:
+                raise VirtboxManageError(reason='unsupported variant provided')
+            _cmd = '%s --variant %s' % (_cmd, variant)
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_closemedium(stdout)
+        return parse_createhd(stdout)
 
     @classmethod
-    def _list(cls, arg):
-        _cmd = '%s list %s' % (cls.cmd, arg)
-        r = envoy.run(_cmd)
-        if r.status_code:
-            raise VirtboxError()
-        else:
-            return r.std_out
+    def modifyhd(cls, filename=None):
+        """
+        VBoxManage modifyhd         <uuid>|<filename>
+                            [--type normal|writethrough|immutable|shareable|
+                                    readonly|multiattach]
+                            [--autoreset on|off]
+                            [--compact]
+                            [--resize <megabytes>|--resizebyte <bytes>]
+        """
+        raise VirtboxCommandNotImplemented(reason="not needed at this time")
 
     @classmethod
-    def list_vms(cls):
-        return(parse_list_vms(cls._list('vms')))
+    def clonehd(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_ostypes(cls):
-        return(parse_list_ostypes(cls._list('ostypes')))
+    def convertfromraw(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def getextradata(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def setextradata(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def setproperty(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def usbfilter(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def sharedfolder(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def guestproperty(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def guestcontrol(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def debugvm(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def metrics(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def hostonlyif(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def dhcpserver(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+
+    @classmethod
+    def extpack(cls, filename=None):
+        """
+        TODO: implement me
+        """
+        raise VirtboxCommandNotImplemented(reason="not yet implemented")
