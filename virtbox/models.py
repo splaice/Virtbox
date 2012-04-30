@@ -11,7 +11,7 @@ import envoy
 
 from .errors import (VirtboxManageError, VirtboxCommandError,
     VirtboxCommandNotImplemented, VirtboxMissingArgument)
-from .utils import (parse_list_vms, parse_list_ostypes, parse_createvm,
+from .parsers import (parse_list_vms, parse_list_ostypes, parse_createvm,
         parse_showvminfo, parse_createhd, parse_unregistervm,
         parse_showhdinfo, parse_closemedium, parse_modifyvm,
         parse_storagectl_add, parse_storagectl_remove, parse_storageattach,

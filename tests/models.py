@@ -12,7 +12,7 @@ import testify
 import uuid
 
 from virtbox.models import Manage
-from .utils import (id_generator, generate_vm, delete_vm, generate_hd,
+from virtbox.utils import (id_generator, generate_vm, delete_vm, generate_hd,
         delete_hd, generate_ctl, delete_ctl)
 
 
@@ -93,6 +93,12 @@ class ManageListVMSTestCase(testify.TestCase):
                 'name mismatch')
         vm_uuid = uuid.UUID('{%s}' % vms[0]['uuid'])
         testify.assert_equal(type(vm_uuid), type(uuid.uuid4()), 'no uuid set')
+
+
+class ManageListOSTypesTestCase(testify.TestCase):
+    def test_list_ostypes(self):
+        out = Manage.list_ostypes()
+        print out
 
 
 class ManageListVMSManyTestCase(testify.TestCase):
