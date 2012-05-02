@@ -1,4 +1,4 @@
-.PHONY: all pep8 pyflakes clean dev shell nuke nuke-vm nuke-hdd
+.PHONY: all pep8 pyflakes clean dev shell nuke nuke-vm nuke-hdd pylint test test-debug test-parsers
 
 GITIGNORES=$(shell cat .gitignore |tr "\\n" ",")
 
@@ -26,6 +26,9 @@ test: pep8 pyflakes env/.pip nuke
 test-debug: pep8 pyflakes env/.pip nuke
 	sudo su virtbox -c 'DEBUG="" bin/virtual-env-exec testify tests'
 
+test-parsers: pep8 pyflakes env/.pip
+	sudo su virtbox -c 'DEBUG="virtbox" bin/virtual-env-exec testify tests.parsers'
+
 shell:
 	bin/virtual-env-exec ipython
 
@@ -42,3 +45,6 @@ nuke-hdd:
 	@sudo su virtbox -c "bin/nuke-all-hdd.sh"
 
 nuke: nuke-vm nuke-hdd
+
+pylint:
+	@pylint virtbox 2>&1 |less
