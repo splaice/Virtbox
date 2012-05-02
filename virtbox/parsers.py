@@ -16,11 +16,15 @@ import logging
 
 from pyparsing import (Word, alphas, dblQuotedString, alphanums, srange,
                        OneOrMore, Group, Suppress, Literal,
-                       LineEnd)
-
+                       LineEnd, Combine, hexnums)
 
 # setup module level logger
 logger = logging.getLogger(__name__)
+
+# pyparsing grammars
+HEX_STRING = lambda n: Word(hexnums, exact=n)
+UUID_STRING = Combine(HEX_STRING(8) + "-" + HEX_STRING(4) + "-" +
+    HEX_STRING(4) + "-" + HEX_STRING(4) + "-" + HEX_STRING(12))
 
 
 def parse_list_vms(txt):
@@ -85,14 +89,12 @@ def parse_showvminfo(txt):
 
 def parse_createhd(txt):
     """
-    Disk image created. UUID: 0ab4081c-f383-4ba0-96df-ed7b4ed2d791
+    Parses the output from the createhd command.
     """
-
-    logger.debug(txt)
-    uuid_prefix = Suppress(Word('Disk image created. UUID:'))
-    id_uuid = Word(alphanums + '-').setResultsName('uuid')
-    hd_info = Group(uuid_prefix + id_uuid)
-    out = hd_info.parseString(txt)[0]
+    uuid_prefix = Group(Word('Disk') + Word('image') + Word('created.') +
+            Word('UUID:'))
+    userdata = uuid_prefix + UUID_STRING.setResultsName('uuid')
+    out = userdata.parseString(txt)
 
     return {'uuid': out.uuid}
 
