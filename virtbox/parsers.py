@@ -45,13 +45,17 @@ def parse_list_ostypes(txt):
     """
     eol = Suppress(LineEnd())
     id_label = Suppress(Word("ID:"))
-    id_os_type = Word(srange("[a-zA-Z0-9_\-/]")).setResultsName('os_type')
-    id_os_desc = Word(srange("[a-zA-Z0-9_\-/]")).setResultsName('os_desc')
+    id_os_type = Word(alphanums + "-" + "/" + "]" + "_").\
+            setResultsName('os_type')
     desc_label = Suppress(Word("Description:"))
-    os_type_group = Group(id_label + id_os_type + eol + desc_label + id_os_desc
-            + eol)
+    id_os_desc = Word(alphanums + "/" + " " + "(" + ")" + ".").\
+            setResultsName('os_desc')
+    os_type_group = Group(id_label + id_os_type + eol + desc_label +
+            id_os_desc)
     os_type_list = OneOrMore(os_type_group)
-    return os_type_list.parseString(txt)
+    token_lists = os_type_list.parseString(txt, parseAll=True)
+    return [{'os_type': token_list.os_type,
+             'os_desc': token_list.os_desc} for token_list in token_lists]
 
 
 def parse_createvm(txt):

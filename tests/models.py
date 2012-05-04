@@ -97,8 +97,9 @@ class ManageListVMSTestCase(testify.TestCase):
 
 class ManageListOSTypesTestCase(testify.TestCase):
     def test_list_ostypes(self):
-        out = Manage.list_ostypes()
-        print out
+        ostypes = Manage.list_ostypes()
+        testify.assert_equal(ostypes[0]['os_desc'], 'Other/Unknown')
+        testify.assert_equal(ostypes[0]['os_type'], 'Other')
 
 
 class ManageListVMSManyTestCase(testify.TestCase):

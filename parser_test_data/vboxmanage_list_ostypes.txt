@@ -1,0 +1,210 @@
+ID:          Other
+Description: Other/Unknown
+
+ID:          Windows31
+Description: Windows 3.1
+
+ID:          Windows95
+Description: Windows 95
+
+ID:          Windows98
+Description: Windows 98
+
+ID:          WindowsMe
+Description: Windows Me
+
+ID:          WindowsNT4
+Description: Windows NT 4
+
+ID:          Windows2000
+Description: Windows 2000
+
+ID:          WindowsXP
+Description: Windows XP
+
+ID:          WindowsXP_64
+Description: Windows XP (64 bit)
+
+ID:          Windows2003
+Description: Windows 2003
+
+ID:          Windows2003_64
+Description: Windows 2003 (64 bit)
+
+ID:          WindowsVista
+Description: Windows Vista
+
+ID:          WindowsVista_64
+Description: Windows Vista (64 bit)
+
+ID:          Windows2008
+Description: Windows 2008
+
+ID:          Windows2008_64
+Description: Windows 2008 (64 bit)
+
+ID:          Windows7
+Description: Windows 7
+
+ID:          Windows7_64
+Description: Windows 7 (64 bit)
+
+ID:          Windows8
+Description: Windows 8
+
+ID:          Windows8_64
+Description: Windows 8 (64 bit)
+
+ID:          WindowsNT
+Description: Other Windows
+
+ID:          Linux22
+Description: Linux 2.2
+
+ID:          Linux24
+Description: Linux 2.4
+
+ID:          Linux24_64
+Description: Linux 2.4 (64 bit)
+
+ID:          Linux26
+Description: Linux 2.6
+
+ID:          Linux26_64
+Description: Linux 2.6 (64 bit)
+
+ID:          ArchLinux
+Description: Arch Linux
+
+ID:          ArchLinux_64
+Description: Arch Linux (64 bit)
+
+ID:          Debian
+Description: Debian
+
+ID:          Debian_64
+Description: Debian (64 bit)
+
+ID:          OpenSUSE
+Description: openSUSE
+
+ID:          OpenSUSE_64
+Description: openSUSE (64 bit)
+
+ID:          Fedora
+Description: Fedora
+
+ID:          Fedora_64
+Description: Fedora (64 bit)
+
+ID:          Gentoo
+Description: Gentoo
+
+ID:          Gentoo_64
+Description: Gentoo (64 bit)
+
+ID:          Mandriva
+Description: Mandriva
+
+ID:          Mandriva_64
+Description: Mandriva (64 bit)
+
+ID:          RedHat
+Description: Red Hat
+
+ID:          RedHat_64
+Description: Red Hat (64 bit)
+
+ID:          Turbolinux
+Description: Turbolinux
+
+ID:          Turbolinux
+Description: Turbolinux (64 bit)
+
+ID:          Ubuntu
+Description: Ubuntu
+
+ID:          Ubuntu_64
+Description: Ubuntu (64 bit)
+
+ID:          Xandros
+Description: Xandros
+
+ID:          Xandros_64
+Description: Xandros (64 bit)
+
+ID:          Oracle
+Description: Oracle
+
+ID:          Oracle_64
+Description: Oracle (64 bit)
+
+ID:          Linux
+Description: Other Linux
+
+ID:          Solaris
+Description: Oracle Solaris 10 5/09 and earlier
+
+ID:          Solaris_64
+Description: Oracle Solaris 10 5/09 and earlier (64 bit)
+
+ID:          OpenSolaris
+Description: Oracle Solaris 10 10/09 and later
+
+ID:          OpenSolaris_64
+Description: Oracle Solaris 10 10/09 and later (64 bit)
+
+ID:          FreeBSD
+Description: FreeBSD
+
+ID:          FreeBSD_64
+Description: FreeBSD (64 bit)
+
+ID:          OpenBSD
+Description: OpenBSD
+
+ID:          OpenBSD_64
+Description: OpenBSD (64 bit)
+
+ID:          NetBSD
+Description: NetBSD
+
+ID:          NetBSD_64
+Description: NetBSD (64 bit)
+
+ID:          OS2Warp3
+Description: OS/2 Warp 3
+
+ID:          OS2Warp4
+Description: OS/2 Warp 4
+
+ID:          OS2Warp45
+Description: OS/2 Warp 4.5
+
+ID:          OS2eCS
+Description: eComStation
+
+ID:          OS2
+Description: Other OS/2
+
+ID:          MacOS
+Description: Mac OS X Server
+
+ID:          MacOS_64
+Description: Mac OS X Server (64 bit)
+
+ID:          DOS
+Description: DOS
+
+ID:          Netware
+Description: Netware
+
+ID:          L4
+Description: L4
+
+ID:          QNX
+Description: QNX
+
+ID:          JRockitVE
+Description: JRockitVE
+

@@ -1,4 +1,4 @@
-.PHONY: all pep8 pyflakes clean dev shell nuke nuke-vm nuke-hdd pylint test test-debug test-parsers
+.PHONY: all pep8 pyflakes clean dev shell nuke nuke-vm nuke-hdd pylint test test-debug test-parsers capture-list-ostypes
 
 GITIGNORES=$(shell cat .gitignore |tr "\\n" ",")
 
@@ -48,3 +48,6 @@ nuke: nuke-vm nuke-hdd
 
 pylint:
 	@pylint virtbox 2>&1 |less
+
+capture-list-ostypes:
+	@bin/virtual-env-exec tools/capture_vboxmanage_list_ostypes.py
