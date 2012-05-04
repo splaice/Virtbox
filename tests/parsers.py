@@ -27,8 +27,8 @@ class ParseCreateHDTestCase(testify.TestCase):
     def test_parse_createhd(self):
         txt = "Disk image created. UUID: e0bfd47f-5a29-4c5e-b325-79c4d032a02f"
         txt2 = "Disk image created. UUID: 00bfd47f-5a29-4c5e-b325-79c4d032a02f"
-        out2 = parse_createhd(txt2)
-        out = parse_createhd(txt)
+        out2 = parse_createhd(txt2, '')
+        out = parse_createhd(txt, '')
         testify.assert_equal(out2['uuid'],
                 '00bfd47f-5a29-4c5e-b325-79c4d032a02f')
         testify.assert_equal(out['uuid'],
@@ -42,6 +42,6 @@ class ParseListOSTypesTestCase(testify.TestCase):
             self.txt = input.read()
 
     def test_parse_ostypes_list(self):
-        ostypes = parse_list_ostypes(self.txt)
+        ostypes = parse_list_ostypes(self.txt, '')
         testify.assert_equal(ostypes[0]['os_desc'], 'Other/Unknown')
         testify.assert_equal(ostypes[0]['os_type'], 'Other')

@@ -57,7 +57,7 @@ class Manage(object):
         _cmd = '%s --version' % cls.cmd
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_version(stdout)
+        return parse_version(stdout, stderr)
 
     @classmethod
     def list_vms(cls):
@@ -66,7 +66,7 @@ class Manage(object):
         _cmd = '%s list vms' % cls.cmd
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_list_vms(stdout)
+        return parse_list_vms(stdout, stderr)
 
     @classmethod
     def list_runningvms(cls, filename=None):
@@ -82,7 +82,7 @@ class Manage(object):
         _cmd = '%s list ostypes' % cls.cmd
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_list_ostypes(stdout)
+        return parse_list_ostypes(stdout, stderr)
 
     @classmethod
     def list_hostdvds(cls, filename=None):
@@ -203,7 +203,7 @@ class Manage(object):
             raise VirtboxManageError(reason="name or uuid argument required")
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_showvminfo(stdout)
+        return parse_showvminfo(stdout, stderr)
 
     @classmethod
     def registervm(cls, filename=None):
@@ -226,7 +226,7 @@ class Manage(object):
             _cmd = '%s --delete' % _cmd
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_unregistervm(stdout)
+        return parse_unregistervm(stdout, stderr)
 
     @classmethod
     def createvm(cls, name=None, ostype=None, register=True, basefolder=None,
@@ -253,7 +253,7 @@ class Manage(object):
                     reason='register as False is currently unsupported.')
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_createvm(stdout)
+        return parse_createvm(stdout, stderr)
 
     @classmethod
     def modifyvm(cls, name=None, uuid=None, new_name=None, ostype=None,
@@ -351,7 +351,7 @@ class Manage(object):
             _cmd = '%s --name %s' % (_cmd, new_name)
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_modifyvm(stdout)
+        return parse_modifyvm(stdout, stderr)
 
     @classmethod
     def clonevm(cls, filename=None):
@@ -430,7 +430,7 @@ class Manage(object):
             _cmd = '%s --delete' % _cmd
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_closemedium(stdout)
+        return parse_closemedium(stdout, stderr)
 
     @classmethod
     def storageattach(cls, uuid=None, vmname=None, name=None, port=None,
@@ -525,7 +525,7 @@ class Manage(object):
             _cmd = '%s --intnet' % _cmd
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_storageattach(stdout)
+        return parse_storageattach(stdout, stderr)
 
     @classmethod
     def storagectl_add(cls, uuid=None, vmname=None, name=None, ctl_type=None,
@@ -579,7 +579,7 @@ class Manage(object):
             _cmd = '%s --bootable %s' % (_cmd, bootable)
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_storagectl_add(stdout)
+        return parse_storagectl_add(stdout, stderr)
 
     @classmethod
     def storagectl_remove(cls, uuid=None, vmname=None, name=None):
@@ -598,7 +598,7 @@ class Manage(object):
             raise VirtboxMissingArgument("kwarg name is required.")
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_storagectl_remove(stdout)
+        return parse_storagectl_remove(stdout, stderr)
 
     @classmethod
     def bandwidthctl(cls, filename=None):
@@ -619,7 +619,7 @@ class Manage(object):
             _cmd = '%s %s' % (_cmd, filename)
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_showhdinfo(stdout)
+        return parse_showhdinfo(stdout, stderr)
 
     @classmethod
     def createhd(cls, filename=None, size=None, sizebytes=None, format=None,
@@ -647,7 +647,7 @@ class Manage(object):
             _cmd = '%s --variant %s' % (_cmd, variant)
 
         stdout, stderr = cls._run_cmd(_cmd)
-        return parse_createhd(stdout)
+        return parse_createhd(stdout, stderr)
 
     @classmethod
     def modifyhd(cls, filename=None):

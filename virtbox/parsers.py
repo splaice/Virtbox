@@ -27,7 +27,9 @@ UUID_STRING = Combine(HEX_STRING(8) + "-" + HEX_STRING(4) + "-" +
     HEX_STRING(4) + "-" + HEX_STRING(4) + "-" + HEX_STRING(12))
 
 
-def parse_list_vms(txt):
+def parse_list_vms(stdout, stderr):
+    """
+    """
     id_vm_name = dblQuotedString(alphas).setResultsName('name')
     id_vm_uuid = Word(srange("[a-zA-Z0-9_\-]")).setResultsName('uuid')
     left_brace = Suppress("{")
@@ -35,13 +37,13 @@ def parse_list_vms(txt):
     vm_group = Group(id_vm_name + left_brace + id_vm_uuid + right_brace)
     vm_list = OneOrMore(vm_group)
 
-    token_lists = vm_list.parseString(txt, parseAll=True)
+    token_lists = vm_list.parseString(stdout, parseAll=True)
     return [{'name': token_list.name.replace('\"', ''),
              'uuid': token_list.uuid} for token_list in token_lists]
 
 
-def parse_list_ostypes(txt):
-    """ Incomplete
+def parse_list_ostypes(stdout, stderr):
+    """
     """
     eol = Suppress(LineEnd())
     id_label = Suppress(Word("ID:"))
@@ -53,16 +55,13 @@ def parse_list_ostypes(txt):
     os_type_group = Group(id_label + id_os_type + eol + desc_label +
             id_os_desc)
     os_type_list = OneOrMore(os_type_group)
-    token_lists = os_type_list.parseString(txt, parseAll=True)
+    token_lists = os_type_list.parseString(stdout, parseAll=True)
     return [{'os_type': token_list.os_type,
              'os_desc': token_list.os_desc} for token_list in token_lists]
 
 
-def parse_createvm(txt):
+def parse_createvm(stdout, stderr):
     """
-    Virtual machine 'foobar' is created and registered.
-    UUID: 65749ad3-a77d-4f82-9dac-6d9176bf5d23
-    Settings file: '/Users/virtbox/VirtualBox VMs/foobar/foobar.vbox'
     """
 
     eol = Suppress(LineEnd())
@@ -77,13 +76,15 @@ def parse_createvm(txt):
     vm_info = Group(name_prefix + single_quote + id_name +
         single_quote + name_postfix + eol + uuid_prefix + id_vm_uuid + eol +
         file_prefix + single_quote + id_file_path + single_quote + eol)
-    out = vm_info.parseString(txt)[0]
+    out = vm_info.parseString(stdout)[0]
     return {'name': out.name, 'uuid': out.uuid, 'file_path': out.file_path}
 
 
-def parse_showvminfo(txt):
+def parse_showvminfo(stdout, stderr):
+    """
+    """
     data = {}
-    for line in txt.split('\n'):
+    for line in stdout.split('\n'):
         if len(line) > 0:
             (key, value) = tuple(line.split('='))
             data[key.lower()] = value.replace('\"', '')
@@ -91,36 +92,29 @@ def parse_showvminfo(txt):
     return data
 
 
-def parse_createhd(txt):
+def parse_createhd(stdout, stderr):
     """
-    Parses the output from the createhd command.
     """
     uuid_prefix = Group(Word('Disk') + Word('image') + Word('created.') +
             Word('UUID:'))
     userdata = uuid_prefix + UUID_STRING.setResultsName('uuid')
-    out = userdata.parseString(txt)
+    out = userdata.parseString(stdout)
 
     return {'uuid': out.uuid}
 
 
-def parse_unregistervm(txt):
-    return txt
-
-
-def parse_closemedium(txt):
-    return txt
-
-
-def parse_showhdinfo(txt):
+def parse_unregistervm(stdout, stderr):
     """
-    UUID:                 1e489961-954b-455a-80e6-873c2bef681b
-    Accessible:           yes
-    Logical size:         128 MBytes
-    Current size on disk: 0 MBytes
-    Type:                 normal (base)
-    Storage format:       VDI
-    Format variant:       dynamic default
-    Location:             /tmp/test.vdi
+    """
+    return stdout
+
+
+def parse_closemedium(stdout, stderr):
+    return stdout
+
+
+def parse_showhdinfo(stdout, stderr):
+    """
     """
 
     eol = Suppress(LineEnd())
@@ -147,7 +141,7 @@ def parse_showhdinfo(txt):
             id_type + eol + prefix_storage_format + id_storage_format + eol +
             prefix_format_variant + id_format_variant + eol + prefix_location +
             id_location + eol)
-    out = hd_info.parseString(txt)[0]
+    out = hd_info.parseString(stdout)[0]
 
     return {'uuid': out.uuid, 'accessible': out.accessible,
             'logical_size': out.logical_size, 'current_size': out.current_size,
@@ -155,22 +149,22 @@ def parse_showhdinfo(txt):
             'format_variant': out.storage_variant, 'location': out.location}
 
 
-def parse_modifyvm(txt):
-    return txt
+def parse_modifyvm(stdout, stderr):
+    return stdout
 
 
-def parse_storagectl_add(txt):
-    return txt
+def parse_storagectl_add(stdout, stderr):
+    return stdout
 
 
-def parse_storagectl_remove(txt):
-    return txt
+def parse_storagectl_remove(stdout, stderr):
+    return stdout
 
 
-def parse_storageattach(txt):
-    return txt
+def parse_storageattach(stdout, stderr):
+    return stdout
 
 
-def parse_version(txt):
-    version = txt.rstrip()
+def parse_version(stdout, stderr):
+    version = stdout.rstrip()
     return {'version': version}
