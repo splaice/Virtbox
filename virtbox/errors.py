@@ -12,7 +12,28 @@ import logging
 
 
 # setup module level logger
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
+
+
+class CommandError(Exception):
+    """ This is an error specific to running a VBoxManage command.
+    """
+    def __init__(self, status_code=None, cmd=None, stdout=None, stderr=None):
+        Exception.__init__()
+        self.status_code = status_code
+        self.cmd = cmd
+        self.stdout = stdout
+        self.stderr = stderr
+
+    def as_dict(self):
+        """
+        returns error information as a dict
+        """
+        return {'status_code': self.status_code, 'cmd': self.cmd, 'stdout':
+                self.stdout, 'stderr': self.stderr}
+
+    def __str__(self):
+        return '%s' % str(self.as_dict())
 
 
 class VirtboxError(Exception):
@@ -30,27 +51,14 @@ class VirtboxManageError(VirtboxError):
     """ This is an error specific to the use of the Manage class.
     """
     def __init__(self, reason=None):
+        VirtboxError.__init__()
         self.reason = reason
 
     def as_dict(self):
+        """
+        returns error information as a dict
+        """
         return {'reason': self.reason}
-
-    def __str__(self):
-        return '%s' % str(self.as_dict())
-
-
-class CommandError(VirtboxError):
-    """ This is an error specific to running a VBoxManage command.
-    """
-    def __init__(self, status_code=None, cmd=None, stdout=None, stderr=None):
-        self.status_code = status_code
-        self.cmd = cmd
-        self.stdout = stdout
-        self.stderr = stderr
-
-    def as_dict(self):
-        return {'status_code': self.status_code, 'cmd': self.cmd, 'stdout':
-                self.stdout, 'stderr': self.stderr}
 
     def __str__(self):
         return '%s' % str(self.as_dict())
@@ -62,9 +70,13 @@ class VirtboxCommandNotImplemented(VirtboxError):
     """
 
     def __init__(self, reason=None):
+        VirtboxError.__init__()
         self.reason = reason
 
     def as_dict(self):
+        """
+        returns error information as a dict
+        """
         return {'reason': self.reason}
 
     def __str__(self):

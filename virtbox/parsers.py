@@ -19,7 +19,7 @@ from pyparsing import (Word, alphas, dblQuotedString, alphanums, srange,
                        LineEnd, Combine, hexnums)
 
 # setup module level logger
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 # pyparsing grammars
 HEX_STRING = lambda n: Word(hexnums, exact=n)
@@ -28,6 +28,8 @@ UUID_STRING = Combine(HEX_STRING(8) + "-" + HEX_STRING(4) + "-" +
 
 
 def parse_version(stdout, stderr):
+    """
+    """
     version = stdout.rstrip()
     return {'version': version}
 
@@ -86,7 +88,6 @@ def parse_unregistervm(stdout, stderr):
 def parse_createvm(stdout, stderr):
     """
     """
-
     eol = Suppress(LineEnd())
     single_quote = Suppress(Literal('\''))
     name_prefix = Suppress(Word('Virtual machine'))
@@ -104,29 +105,38 @@ def parse_createvm(stdout, stderr):
 
 
 def parse_modifyvm(stdout, stderr):
+    """
+    """
     return stdout
 
 
 def parse_closemedium(stdout, stderr):
+    """
+    """
     return stdout
 
 
 def parse_storageattach(stdout, stderr):
+    """
+    """
     return stdout
 
 
 def parse_storagectl_add(stdout, stderr):
+    """
+    """
     return stdout
 
 
 def parse_storagectl_remove(stdout, stderr):
+    """
+    """
     return stdout
 
 
 def parse_showhdinfo(stdout, stderr):
     """
     """
-
     eol = Suppress(LineEnd())
     uuid_prefix = Suppress(Word('UUID:'))
     id_uuid = Word(alphanums + '-').setResultsName('uuid')

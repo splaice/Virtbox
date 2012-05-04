@@ -22,29 +22,35 @@ from .errors import CommandError
 
 
 # setup module level logger
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 def run_cmd(cmd):
-    r = envoy.run(cmd)
-    if r.status_code:
-        logger.error('cmd: %s status_code: %d stdout: %s stderr: %s' %
-            (cmd, r.status_code, r.std_out.replace('\n', ' '),
-                r.std_err.replace('\n', ' ')))
-        raise CommandError(status_code=r.status_code, cmd=cmd,
-            stdout=r.std_out, stderr=r.std_err)
+    """
+    """
+    res = envoy.run(cmd)
+    if res.status_code:
+        LOGGER.error('cmd: %s status_code: %d stdout: %s stderr: %s' %
+            (cmd, res.status_code, res.std_out.replace('\n', ' '),
+                res.std_err.replace('\n', ' ')))
+        raise CommandError(status_code=res.status_code, cmd=cmd,
+            stdout=res.std_out, stderr=res.std_err)
 
-    logger.debug('cmd: %s status_code: %d stdout: %s stderr: %s' % (cmd,
-        r.status_code, r.std_out.replace('\n', ' '),
-        r.std_err.replace('\n', ' ')))
-    return (r.std_out, r.std_err)
+    LOGGER.debug('cmd: %s status_code: %d stdout: %s stderr: %s' % (cmd,
+        res.status_code, res.std_out.replace('\n', ' '),
+        res.std_err.replace('\n', ' ')))
+    return (res.std_out, res.std_err)
 
 
 def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
+    """
+    """
     return ''.join(random.choice(chars) for x in range(size))
 
 
 def generate_vm(**kwargs):
+    """
+    """
     from .models import Manage
     data = {'name': id_generator(7),
             'ostype': 'Linux'}
@@ -53,6 +59,8 @@ def generate_vm(**kwargs):
 
 
 def delete_vm(**kwargs):
+    """
+    """
     from .models import Manage
     data = {'delete': True}
     data.update(kwargs)
@@ -63,6 +71,8 @@ def delete_vm(**kwargs):
 
 
 def generate_hd(**kwargs):
+    """
+    """
     from .models import Manage
     filename = '%s.vdi' % id_generator()
     data = {'size': '128',
@@ -75,12 +85,16 @@ def generate_hd(**kwargs):
 
 
 def delete_hd(**kwargs):
+    """
+    """
     data = {}
     data.update(kwargs)
     os.remove(data['filename'])
 
 
 def generate_ctl(**kwargs):
+    """
+    """
     from .models import Manage
     data = {'name': 'primary',
             'ctl_type': 'scsi',
@@ -91,6 +105,8 @@ def generate_ctl(**kwargs):
 
 
 def delete_ctl(**kwargs):
+    """
+    """
     from .models import Manage
     data = {'name': 'primary'}
     data.update(kwargs)

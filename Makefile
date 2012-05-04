@@ -47,7 +47,7 @@ nuke-hdd:
 nuke: nuke-vm nuke-hdd
 
 pylint:
-	@pylint virtbox 2>&1 |less
+	@bin/virtual-env-exec pylint virtbox 2>&1 |less
 
 capture-list-ostypes:
 	@bin/virtual-env-exec tools/capture_vboxmanage_list_ostypes.py

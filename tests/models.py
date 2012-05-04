@@ -285,7 +285,7 @@ class ManageCreateHDTestCase(testify.TestCase):
 
     def test_createhd(self):
         hd_info = Manage.createhd(filename=self.hd_filename, size=self.hd_size,
-                format=self.hd_format, variant=self.hd_variant)
+                hd_format=self.hd_format, variant=self.hd_variant)
         # TODO: remove once we figure out why we get a bad uuid returned
         try:
             hd_uuid = uuid.UUID('{%s}' % hd_info['uuid'])

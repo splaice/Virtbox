@@ -30,10 +30,12 @@ STORAGE_MTYPES = ('normal', 'writethrough', 'immutable', 'shareable',
 
 
 # setup module level logger
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class Manage(object):
+    """
+    """
     @classmethod
     def version(cls):
         """
@@ -53,7 +55,7 @@ class Manage(object):
         return parse_list_vms(stdout, stderr)
 
     @classmethod
-    def list_runningvms(cls, filename=None):
+    def list_runningvms(cls):
         """
         TODO: implement me
         """
@@ -69,112 +71,112 @@ class Manage(object):
         return parse_list_ostypes(stdout, stderr)
 
     @classmethod
-    def list_hostdvds(cls, filename=None):
+    def list_hostdvds(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_hostfloppies(cls, filename=None):
+    def list_hostfloppies(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_bridgedifs(cls, filename=None):
+    def list_bridgedifs(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_hostonlyifs(cls, filename=None):
+    def list_hostonlyifs(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_dhcpservers(cls, filename=None):
+    def list_dhcpservers(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_hostinfo(cls, filename=None):
+    def list_hostinfo(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_hostcpuids(cls, filename=None):
+    def list_hostcpuids(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_hddbackends(cls, filename=None):
+    def list_hddbackends(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_hdds(cls, filename=None):
+    def list_hdds(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_dvds(cls, filename=None):
+    def list_dvds(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_floppies(cls, filename=None):
+    def list_floppies(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_usbhost(cls, filename=None):
+    def list_usbhost(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_usbfilters(cls, filename=None):
+    def list_usbfilters(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_systemproperties(cls, filename=None):
+    def list_systemproperties(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def list_extpacks(cls, filename=None):
+    def list_extpacks(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def showvminfo(cls, name=None, uuid=None, log=False):
+    def showvminfo(cls, name=None, uuid=None):
         """
         """
         cmd = '%s showvminfo --machinereadable --details' % VBOXMANAGE_CMD
@@ -190,7 +192,7 @@ class Manage(object):
         return parse_showvminfo(stdout, stderr)
 
     @classmethod
-    def registervm(cls, filename=None):
+    def registervm(cls):
         """
         """
         raise VirtboxCommandNotImplemented(reason="not needed at this time")
@@ -323,6 +325,7 @@ class Manage(object):
             snapshotfolder=None, teleporter=None, teleporterport=None,
             teleporteraddress=None, teleporterpassword=None):
         """
+        TODO: complete me
         """
         cmd = '%s modifyvm' % VBOXMANAGE_CMD
 
@@ -338,56 +341,56 @@ class Manage(object):
         return parse_modifyvm(stdout, stderr)
 
     @classmethod
-    def clonevm(cls, filename=None):
+    def clonevm(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def importvm(cls, filename=None):
+    def importvm(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def exportvm(cls, filename=None):
+    def exportvm(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def startvm(cls, filename=None):
+    def startvm(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def controlvm(cls, filename=None):
+    def controlvm(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def discardstate(cls, filename=None):
+    def discardstate(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def adoptstate(cls, filename=None):
+    def adoptstate(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def snapshot(cls, filename=None):
+    def snapshot(cls):
         """
         TODO: implement me
         """
@@ -585,7 +588,7 @@ class Manage(object):
         return parse_storagectl_remove(stdout, stderr)
 
     @classmethod
-    def bandwidthctl(cls, filename=None):
+    def bandwidthctl(cls):
         """
         TODO: implement me
         """
@@ -606,7 +609,7 @@ class Manage(object):
         return parse_showhdinfo(stdout, stderr)
 
     @classmethod
-    def createhd(cls, filename=None, size=None, sizebytes=None, format=None,
+    def createhd(cls, filename=None, size=None, sizebytes=None, hd_format=None,
             variant=None):
         """
         """
@@ -620,10 +623,10 @@ class Manage(object):
         elif size:
             cmd = '%s --size %s' % (cmd, size)
 
-        if format:
-            if format not in HD_FORMATS:
+        if hd_format:
+            if hd_format not in HD_FORMATS:
                 raise VirtboxManageError(reason='unsupported format provided')
-            cmd = '%s --format %s' % (cmd, format)
+            cmd = '%s --format %s' % (cmd, hd_format)
 
         if variant:
             if variant not in HD_VARIANTS:
@@ -634,104 +637,104 @@ class Manage(object):
         return parse_createhd(stdout, stderr)
 
     @classmethod
-    def modifyhd(cls, filename=None):
+    def modifyhd(cls):
         """
         """
         raise VirtboxCommandNotImplemented(reason="not needed at this time")
 
     @classmethod
-    def clonehd(cls, filename=None):
+    def clonehd(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def convertfromraw(cls, filename=None):
+    def convertfromraw(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def getextradata(cls, filename=None):
+    def getextradata(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def setextradata(cls, filename=None):
+    def setextradata(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def setproperty(cls, filename=None):
+    def setproperty(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def usbfilter(cls, filename=None):
+    def usbfilter(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def sharedfolder(cls, filename=None):
+    def sharedfolder(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def guestproperty(cls, filename=None):
+    def guestproperty(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def guestcontrol(cls, filename=None):
+    def guestcontrol(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def debugvm(cls, filename=None):
+    def debugvm(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def metrics(cls, filename=None):
+    def metrics(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def hostonlyif(cls, filename=None):
+    def hostonlyif(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def dhcpserver(cls, filename=None):
+    def dhcpserver(cls):
         """
         TODO: implement me
         """
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def extpack(cls, filename=None):
+    def extpack(cls):
         """
         TODO: implement me
         """
