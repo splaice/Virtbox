@@ -16,12 +16,28 @@ import os
 import logging
 import string
 import random
+import envoy
 
-from .models import Manage
+from .errors import CommandError
 
 
 # setup module level logger
 logger = logging.getLogger(__name__)
+
+
+def run_cmd(cmd):
+    r = envoy.run(cmd)
+    if r.status_code:
+        logger.error('cmd: %s status_code: %d stdout: %s stderr: %s' %
+            (cmd, r.status_code, r.std_out.replace('\n', ' '),
+                r.std_err.replace('\n', ' ')))
+        raise CommandError(status_code=r.status_code, cmd=cmd,
+            stdout=r.std_out, stderr=r.std_err)
+
+    logger.debug('cmd: %s status_code: %d stdout: %s stderr: %s' % (cmd,
+        r.status_code, r.std_out.replace('\n', ' '),
+        r.std_err.replace('\n', ' ')))
+    return (r.std_out, r.std_err)
 
 
 def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
@@ -29,6 +45,7 @@ def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
 
 
 def generate_vm(**kwargs):
+    from .models import Manage
     data = {'name': id_generator(7),
             'ostype': 'Linux'}
     data.update(kwargs)
@@ -36,6 +53,7 @@ def generate_vm(**kwargs):
 
 
 def delete_vm(**kwargs):
+    from .models import Manage
     data = {'delete': True}
     data.update(kwargs)
     # prune unneeded / unexpected kwargs
@@ -45,6 +63,7 @@ def delete_vm(**kwargs):
 
 
 def generate_hd(**kwargs):
+    from .models import Manage
     filename = '%s.vdi' % id_generator()
     data = {'size': '128',
             'format': 'VDI',
@@ -62,6 +81,7 @@ def delete_hd(**kwargs):
 
 
 def generate_ctl(**kwargs):
+    from .models import Manage
     data = {'name': 'primary',
             'ctl_type': 'scsi',
             'controller': 'LSILogic'}
@@ -71,6 +91,7 @@ def generate_ctl(**kwargs):
 
 
 def delete_ctl(**kwargs):
+    from .models import Manage
     data = {'name': 'primary'}
     data.update(kwargs)
     # prune unneeded / unexpected kwargs

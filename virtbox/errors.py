@@ -39,7 +39,7 @@ class VirtboxManageError(VirtboxError):
         return '%s' % str(self.as_dict())
 
 
-class VirtboxCommandError(VirtboxError):
+class CommandError(VirtboxError):
     """ This is an error specific to running a VBoxManage command.
     """
     def __init__(self, status_code=None, cmd=None, stdout=None, stderr=None):

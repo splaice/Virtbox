@@ -7,16 +7,17 @@ This module contains the primary objects that power virtbox.
 """
 
 import logging
-import envoy
 
-from .errors import (VirtboxManageError, VirtboxCommandError,
-    VirtboxCommandNotImplemented, VirtboxMissingArgument)
+from .utils import run_cmd
+from .errors import (VirtboxManageError, VirtboxCommandNotImplemented,
+        VirtboxMissingArgument)
 from .parsers import (parse_list_vms, parse_list_ostypes, parse_createvm,
         parse_showvminfo, parse_createhd, parse_unregistervm,
         parse_showhdinfo, parse_closemedium, parse_modifyvm,
         parse_storagectl_add, parse_storagectl_remove, parse_storageattach,
         parse_version)
 
+VBOXMANAGE_CMD = 'VBoxManage'
 HD_FORMATS = ('VDI', 'VMDK', 'VHD', 'RAW')
 HD_VARIANTS = ('Standard', 'Fixed', 'Split2G', 'Stream', 'ESX')
 MEDIUM_TYPES = ('disk', 'dvd', 'floppy')
@@ -33,39 +34,22 @@ logger = logging.getLogger(__name__)
 
 
 class Manage(object):
-    cmd = 'VBoxManage'
-
-    @classmethod
-    def _run_cmd(cls, cmd):
-        r = envoy.run(cmd)
-        if r.status_code:
-            logger.error('cmd: %s status_code: %d stdout: %s stderr: %s' %
-                    (cmd, r.status_code, r.std_out.replace('\n', ' '),
-                        r.std_err.replace('\n', ' ')))
-            raise VirtboxCommandError(status_code=r.status_code, cmd=cmd,
-                    stdout=r.std_out, stderr=r.std_err)
-
-        logger.debug('cmd: %s status_code: %d stdout: %s stderr: %s' % (cmd,
-                r.status_code, r.std_out.replace('\n', ' '),
-                r.std_err.replace('\n', ' ')))
-        return (r.std_out, r.std_err)
-
     @classmethod
     def version(cls):
         """
         """
-        _cmd = '%s --version' % cls.cmd
+        cmd = '%s --version' % VBOXMANAGE_CMD
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_version(stdout, stderr)
 
     @classmethod
     def list_vms(cls):
         """
         """
-        _cmd = '%s list vms' % cls.cmd
+        cmd = '%s list vms' % VBOXMANAGE_CMD
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_list_vms(stdout, stderr)
 
     @classmethod
@@ -79,9 +63,9 @@ class Manage(object):
     def list_ostypes(cls):
         """
         """
-        _cmd = '%s list ostypes' % cls.cmd
+        cmd = '%s list ostypes' % VBOXMANAGE_CMD
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_list_ostypes(stdout, stderr)
 
     @classmethod
@@ -193,16 +177,16 @@ class Manage(object):
     def showvminfo(cls, name=None, uuid=None, log=False):
         """
         """
-        _cmd = '%s showvminfo --machinereadable --details' % cls.cmd
+        cmd = '%s showvminfo --machinereadable --details' % VBOXMANAGE_CMD
 
         if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
+            cmd = '%s %s' % (cmd, uuid)
         elif name:
-            _cmd = '%s %s' % (_cmd, name)
+            cmd = '%s %s' % (cmd, name)
         else:
             raise VirtboxManageError(reason="name or uuid argument required")
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_showvminfo(stdout, stderr)
 
     @classmethod
@@ -215,17 +199,17 @@ class Manage(object):
     def unregistervm(cls, name=None, uuid=None, delete=True):
         """
         """
-        _cmd = '%s unregistervm' % cls.cmd
+        cmd = '%s unregistervm' % VBOXMANAGE_CMD
 
         if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
+            cmd = '%s %s' % (cmd, uuid)
         elif name:
-            _cmd = '%s %s' % (_cmd, name)
+            cmd = '%s %s' % (cmd, name)
 
         if delete:
-            _cmd = '%s --delete' % _cmd
+            cmd = '%s --delete' % cmd
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_unregistervm(stdout, stderr)
 
     @classmethod
@@ -233,26 +217,26 @@ class Manage(object):
             uuid=None):
         """
         """
-        _cmd = '%s createvm' % cls.cmd
+        cmd = '%s createvm' % VBOXMANAGE_CMD
         if name:
-            _cmd = '%s --name %s' % (_cmd, name)
+            cmd = '%s --name %s' % (cmd, name)
 
         if ostype:
-            _cmd = '%s --ostype %s' % (_cmd, ostype)
+            cmd = '%s --ostype %s' % (cmd, ostype)
 
         if basefolder:
-            _cmd = '%s --basefolder %s' % (_cmd, basefolder)
+            cmd = '%s --basefolder %s' % (cmd, basefolder)
 
         if uuid:
-            _cmd = '%s --uuid %s' % (_cmd, uuid)
+            cmd = '%s --uuid %s' % (cmd, uuid)
 
         if register:
-            _cmd = '%s --register' % _cmd
+            cmd = '%s --register' % cmd
         else:
             raise VirtboxManageError(
                     reason='register as False is currently unsupported.')
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_createvm(stdout, stderr)
 
     @classmethod
@@ -340,17 +324,17 @@ class Manage(object):
             teleporteraddress=None, teleporterpassword=None):
         """
         """
-        _cmd = '%s modifyvm' % cls.cmd
+        cmd = '%s modifyvm' % VBOXMANAGE_CMD
 
         if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
+            cmd = '%s %s' % (cmd, uuid)
         elif name:
-            _cmd = '%s %s' % (_cmd, name)
+            cmd = '%s %s' % (cmd, name)
 
         if new_name:
-            _cmd = '%s --name %s' % (_cmd, new_name)
+            cmd = '%s --name %s' % (cmd, new_name)
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_modifyvm(stdout, stderr)
 
     @classmethod
@@ -414,22 +398,22 @@ class Manage(object):
             delete=False):
         """
         """
-        _cmd = '%s closemedium' % cls.cmd
+        cmd = '%s closemedium' % VBOXMANAGE_CMD
 
         if medium_type:
             if medium_type not in MEDIUM_TYPES:
                 raise VirtboxManageError(reason='unsupported medium provided')
-            _cmd = '%s %s' % (_cmd, medium_type)
+            cmd = '%s %s' % (cmd, medium_type)
 
         if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
+            cmd = '%s %s' % (cmd, uuid)
         elif filename:
-            _cmd = '%s %s' % (_cmd, filename)
+            cmd = '%s %s' % (cmd, filename)
 
         if delete:
-            _cmd = '%s --delete' % _cmd
+            cmd = '%s --delete' % cmd
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_closemedium(stdout, stderr)
 
     @classmethod
@@ -441,90 +425,90 @@ class Manage(object):
             encodedlun=None, username=None, password=None, intnet=None):
         """
         """
-        _cmd = '%s storageattach' % cls.cmd
+        cmd = '%s storageattach' % VBOXMANAGE_CMD
 
         if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
+            cmd = '%s %s' % (cmd, uuid)
         elif vmname:
-            _cmd = '%s %s' % (_cmd, vmname)
+            cmd = '%s %s' % (cmd, vmname)
 
         if name:
-            _cmd = '%s --storagectl %s' % (_cmd, name)
+            cmd = '%s --storagectl %s' % (cmd, name)
         else:
             raise VirtboxMissingArgument("kwarg name is required.")
 
         if port:
-            _cmd = '%s --port %s' % (_cmd, port)
+            cmd = '%s --port %s' % (cmd, port)
 
         if device:
-            _cmd = '%s --device %s' % (_cmd, device)
+            cmd = '%s --device %s' % (cmd, device)
 
         if storage_type:
             if storage_type not in STORAGE_TYPES:
                 raise VirtboxManageError(
                         reason='unsupported storage_type provided')
 
-            _cmd = '%s --type %s' % (_cmd, storage_type)
+            cmd = '%s --type %s' % (cmd, storage_type)
 
         if medium:
-            _cmd = '%s --medium %s' % (_cmd, medium)
+            cmd = '%s --medium %s' % (cmd, medium)
 
         if mtype:
             if mtype not in STORAGE_MTYPES:
                 raise VirtboxManageError(
                         reason='unsupported storage_type provided')
 
-            _cmd = '%s --mtype %s' % (_cmd, type)
+            cmd = '%s --mtype %s' % (cmd, type)
 
         if comment:
-            _cmd = '%s --comment %s' % (_cmd, comment)
+            cmd = '%s --comment %s' % (cmd, comment)
 
         if setuuid:
-            _cmd = '%s --setuuid %s' % (_cmd, setuuid)
+            cmd = '%s --setuuid %s' % (cmd, setuuid)
 
         if setparentuuid:
-            _cmd = '%s --setparentuuid %s' % (_cmd, setparentuuid)
+            cmd = '%s --setparentuuid %s' % (cmd, setparentuuid)
 
         if passthrough:
-            _cmd = '%s --passthrough %s' % (_cmd, passthrough)
+            cmd = '%s --passthrough %s' % (cmd, passthrough)
 
         if tempeject:
-            _cmd = '%s --tempeject %s' % (_cmd, tempeject)
+            cmd = '%s --tempeject %s' % (cmd, tempeject)
 
         if nonrotational:
-            _cmd = '%s --nonrotational %s' % (_cmd, nonrotational)
+            cmd = '%s --nonrotational %s' % (cmd, nonrotational)
 
         if bandwidthgroup:
-            _cmd = '%s --bandwidthgroup %s' % (_cmd, bandwidthgroup)
+            cmd = '%s --bandwidthgroup %s' % (cmd, bandwidthgroup)
 
         if forceunmount:
-            _cmd = '%s --forceunmount' % _cmd
+            cmd = '%s --forceunmount' % cmd
 
         if server:
-            _cmd = '%s --server %s' % (_cmd, server)
+            cmd = '%s --server %s' % (cmd, server)
 
         if target:
-            _cmd = '%s --target %s' % (_cmd, target)
+            cmd = '%s --target %s' % (cmd, target)
 
         if tport:
-            _cmd = '%s --tport %s' % (_cmd, tport)
+            cmd = '%s --tport %s' % (cmd, tport)
 
         if lun:
-            _cmd = '%s --lun %s' % (_cmd, lun)
+            cmd = '%s --lun %s' % (cmd, lun)
 
         if encodedlun:
-            _cmd = '%s --encodedlun %s' % (_cmd, encodedlun)
+            cmd = '%s --encodedlun %s' % (cmd, encodedlun)
 
         if username:
-            _cmd = '%s --username %s' % (_cmd, username)
+            cmd = '%s --username %s' % (cmd, username)
 
         if password:
-            _cmd = '%s --password %s' % (_cmd, password)
+            cmd = '%s --password %s' % (cmd, password)
 
         if intnet:
-            _cmd = '%s --intnet' % _cmd
+            cmd = '%s --intnet' % cmd
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_storageattach(stdout, stderr)
 
     @classmethod
@@ -534,15 +518,15 @@ class Manage(object):
             bootable=False):
         """
         """
-        _cmd = '%s storagectl' % cls.cmd
+        cmd = '%s storagectl' % VBOXMANAGE_CMD
 
         if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
+            cmd = '%s %s' % (cmd, uuid)
         elif vmname:
-            _cmd = '%s %s' % (_cmd, vmname)
+            cmd = '%s %s' % (cmd, vmname)
 
         if name:
-            _cmd = '%s --name %s' % (_cmd, name)
+            cmd = '%s --name %s' % (cmd, name)
         else:
             raise VirtboxMissingArgument("kwarg name is required.")
 
@@ -551,53 +535,53 @@ class Manage(object):
                 raise VirtboxManageError(
                         reason='unsupported ctl_type provided')
             else:
-                _cmd = '%s --add %s' % (_cmd, ctl_type)
+                cmd = '%s --add %s' % (cmd, ctl_type)
 
         if controller:
             if controller not in STORAGECTL_CONTROLLERS:
                 raise VirtboxManageError(
                         reason='unsupported controller ctl_type provided')
             else:
-                _cmd = '%s --controller %s' % (_cmd, controller)
+                cmd = '%s --controller %s' % (cmd, controller)
 
         if sataideemulation1:
-            _cmd = '%s --sataideemulation1 %d' % (_cmd, sataideemulation1)
+            cmd = '%s --sataideemulation1 %d' % (cmd, sataideemulation1)
 
         if sataideemulation2:
-            _cmd = '%s --sataideemulation2 %d' % (_cmd, sataideemulation2)
+            cmd = '%s --sataideemulation2 %d' % (cmd, sataideemulation2)
 
         if sataideemulation3:
-            _cmd = '%s --sataideemulation3 %d' % (_cmd, sataideemulation3)
+            cmd = '%s --sataideemulation3 %d' % (cmd, sataideemulation3)
 
         if sataideemulation4:
-            _cmd = '%s --sataideemulation4 %d' % (_cmd, sataideemulation4)
+            cmd = '%s --sataideemulation4 %d' % (cmd, sataideemulation4)
 
         if hostiocache:
-            _cmd = '%s --hostiocache %s' % (_cmd, hostiocache)
+            cmd = '%s --hostiocache %s' % (cmd, hostiocache)
 
         if bootable:
-            _cmd = '%s --bootable %s' % (_cmd, bootable)
+            cmd = '%s --bootable %s' % (cmd, bootable)
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_storagectl_add(stdout, stderr)
 
     @classmethod
     def storagectl_remove(cls, uuid=None, vmname=None, name=None):
         """
         """
-        _cmd = '%s storagectl' % cls.cmd
+        cmd = '%s storagectl' % VBOXMANAGE_CMD
 
         if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
+            cmd = '%s %s' % (cmd, uuid)
         elif vmname:
-            _cmd = '%s %s' % (_cmd, vmname)
+            cmd = '%s %s' % (cmd, vmname)
 
         if name:
-            _cmd = '%s --name %s --remove' % (_cmd, name)
+            cmd = '%s --name %s --remove' % (cmd, name)
         else:
             raise VirtboxMissingArgument("kwarg name is required.")
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_storagectl_remove(stdout, stderr)
 
     @classmethod
@@ -611,14 +595,14 @@ class Manage(object):
     def showhdinfo(cls, uuid=None, filename=None):
         """
         """
-        _cmd = '%s showhdinfo' % cls.cmd
+        cmd = '%s showhdinfo' % VBOXMANAGE_CMD
 
         if uuid:
-            _cmd = '%s %s' % (_cmd, uuid)
+            cmd = '%s %s' % (cmd, uuid)
         elif filename:
-            _cmd = '%s %s' % (_cmd, filename)
+            cmd = '%s %s' % (cmd, filename)
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_showhdinfo(stdout, stderr)
 
     @classmethod
@@ -626,27 +610,27 @@ class Manage(object):
             variant=None):
         """
         """
-        _cmd = '%s createhd' % cls.cmd
+        cmd = '%s createhd' % VBOXMANAGE_CMD
 
         if filename:
-            _cmd = '%s --filename %s' % (_cmd, filename)
+            cmd = '%s --filename %s' % (cmd, filename)
 
         if sizebytes:
-            _cmd = '%s --sizebytes %s' % (_cmd, sizebytes)
+            cmd = '%s --sizebytes %s' % (cmd, sizebytes)
         elif size:
-            _cmd = '%s --size %s' % (_cmd, size)
+            cmd = '%s --size %s' % (cmd, size)
 
         if format:
             if format not in HD_FORMATS:
                 raise VirtboxManageError(reason='unsupported format provided')
-            _cmd = '%s --format %s' % (_cmd, format)
+            cmd = '%s --format %s' % (cmd, format)
 
         if variant:
             if variant not in HD_VARIANTS:
                 raise VirtboxManageError(reason='unsupported variant provided')
-            _cmd = '%s --variant %s' % (_cmd, variant)
+            cmd = '%s --variant %s' % (cmd, variant)
 
-        stdout, stderr = cls._run_cmd(_cmd)
+        stdout, stderr = run_cmd(cmd)
         return parse_createhd(stdout, stderr)
 
     @classmethod
