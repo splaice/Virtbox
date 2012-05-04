@@ -27,6 +27,11 @@ UUID_STRING = Combine(HEX_STRING(8) + "-" + HEX_STRING(4) + "-" +
     HEX_STRING(4) + "-" + HEX_STRING(4) + "-" + HEX_STRING(12))
 
 
+def parse_version(stdout, stderr):
+    version = stdout.rstrip()
+    return {'version': version}
+
+
 def parse_list_vms(stdout, stderr):
     """
     """
@@ -60,6 +65,24 @@ def parse_list_ostypes(stdout, stderr):
              'os_desc': token_list.os_desc} for token_list in token_lists]
 
 
+def parse_showvminfo(stdout, stderr):
+    """
+    """
+    data = {}
+    for line in stdout.split('\n'):
+        if len(line) > 0:
+            (key, value) = tuple(line.split('='))
+            data[key.lower()] = value.replace('\"', '')
+
+    return data
+
+
+def parse_unregistervm(stdout, stderr):
+    """
+    """
+    return stdout
+
+
 def parse_createvm(stdout, stderr):
     """
     """
@@ -80,36 +103,23 @@ def parse_createvm(stdout, stderr):
     return {'name': out.name, 'uuid': out.uuid, 'file_path': out.file_path}
 
 
-def parse_showvminfo(stdout, stderr):
-    """
-    """
-    data = {}
-    for line in stdout.split('\n'):
-        if len(line) > 0:
-            (key, value) = tuple(line.split('='))
-            data[key.lower()] = value.replace('\"', '')
-
-    return data
-
-
-def parse_createhd(stdout, stderr):
-    """
-    """
-    uuid_prefix = Group(Word('Disk') + Word('image') + Word('created.') +
-            Word('UUID:'))
-    userdata = uuid_prefix + UUID_STRING.setResultsName('uuid')
-    out = userdata.parseString(stdout)
-
-    return {'uuid': out.uuid}
-
-
-def parse_unregistervm(stdout, stderr):
-    """
-    """
+def parse_modifyvm(stdout, stderr):
     return stdout
 
 
 def parse_closemedium(stdout, stderr):
+    return stdout
+
+
+def parse_storageattach(stdout, stderr):
+    return stdout
+
+
+def parse_storagectl_add(stdout, stderr):
+    return stdout
+
+
+def parse_storagectl_remove(stdout, stderr):
     return stdout
 
 
@@ -149,22 +159,12 @@ def parse_showhdinfo(stdout, stderr):
             'format_variant': out.storage_variant, 'location': out.location}
 
 
-def parse_modifyvm(stdout, stderr):
-    return stdout
+def parse_createhd(stdout, stderr):
+    """
+    """
+    uuid_prefix = Group(Word('Disk') + Word('image') + Word('created.') +
+            Word('UUID:'))
+    userdata = uuid_prefix + UUID_STRING.setResultsName('uuid')
+    out = userdata.parseString(stdout)
 
-
-def parse_storagectl_add(stdout, stderr):
-    return stdout
-
-
-def parse_storagectl_remove(stdout, stderr):
-    return stdout
-
-
-def parse_storageattach(stdout, stderr):
-    return stdout
-
-
-def parse_version(stdout, stderr):
-    version = stdout.rstrip()
-    return {'version': version}
+    return {'uuid': out.uuid}

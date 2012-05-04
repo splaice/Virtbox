@@ -20,7 +20,95 @@ from virtbox.utils import (id_generator, generate_vm, delete_vm, generate_hd,
 logger = logging.getLogger(__name__)
 
 
-class ManageCreateTestCase(testify.TestCase):
+class ManageVersionTestCase(testify.TestCase):
+    def test_version(self):
+        out = Manage.version()
+        testify.assert_equal(bool(out['version']), True)
+
+
+class ManageListVMSManyTestCase(testify.TestCase):
+    @testify.setup
+    def setup_vm(self):
+        self.vm0 = generate_vm()
+        self.vm1 = generate_vm()
+        self.vm2 = generate_vm()
+
+    @testify.teardown
+    def cleanup_vm(self):
+        delete_vm(**self.vm0)
+        delete_vm(**self.vm1)
+        delete_vm(**self.vm2)
+
+    def test_list_vms(self):
+        vms = Manage.list_vms()
+        testify.assert_equal(vms[0]['name'], self.vm0['name'],
+                'name mismatch')
+        testify.assert_equal(vms[1]['name'], self.vm1['name'],
+                'name mismatch')
+        testify.assert_equal(vms[2]['name'], self.vm2['name'],
+                'name mismatch')
+
+
+class ManageListOSTypesTestCase(testify.TestCase):
+    def test_list_ostypes(self):
+        ostypes = Manage.list_ostypes()
+        testify.assert_equal(ostypes[0]['os_desc'], 'Other/Unknown')
+        testify.assert_equal(ostypes[0]['os_type'], 'Other')
+
+
+class ManageListVMSTestCase(testify.TestCase):
+    @testify.setup
+    def setup_vm(self):
+        self.vms = []
+        self.vms.append(generate_vm())
+
+    @testify.teardown
+    def cleanup_vm(self):
+        Manage.unregistervm(name=self.vms[0]['name'], delete=True)
+
+    def test_list_vms(self):
+        vms = Manage.list_vms()
+        testify.assert_equal(vms[0]['name'], self.vms[0]['name'],
+                'name mismatch')
+        vm_uuid = uuid.UUID('{%s}' % vms[0]['uuid'])
+        testify.assert_equal(type(vm_uuid), type(uuid.uuid4()), 'no uuid set')
+
+
+class ManageShowVMInfoTestCase(testify.TestCase):
+    @testify.setup
+    def create_vm(self):
+        self.vm_info = Manage.createvm(name='taco')
+
+    @testify.teardown
+    def destroy_vm(self):
+        Manage.unregistervm(name=self.vm_info['name'], delete=True)
+
+    def test_showvminfo_by_name(self):
+        vm_details = Manage.showvminfo(name=self.vm_info['name'])
+        testify.assert_equal(vm_details['name'], self.vm_info['name'])
+        testify.assert_equal(vm_details['uuid'], self.vm_info['uuid'])
+
+    def test_showvminfo_by_uuid(self):
+        vm_details = Manage.showvminfo(name=self.vm_info['uuid'])
+        testify.assert_equal(vm_details['name'], self.vm_info['name'])
+        testify.assert_equal(vm_details['uuid'], self.vm_info['uuid'])
+
+
+class ManageUnregisterTestCase(testify.TestCase):
+    @testify.setup
+    def setup_unregistervm(self):
+        self.vm = generate_vm()
+
+    def test_unregistervm_by_name(self):
+        out = Manage.unregistervm(name=self.vm['name'], delete=True)
+        testify.assert_equal(out, '', 'returned non-empty string')
+
+    def test_unregistervm_by_uuid(self):
+        out = Manage.unregistervm(uuid=self.vm['uuid'], delete=True)
+        testify.assert_equal(out, '', 'returned non-empty string')
+
+
+class ManageCreateVMTestCase(testify.TestCase):
     @testify.setup
     def setup_vm_info(self):
         self.vm_name = id_generator()
@@ -63,208 +151,6 @@ class ManageCreateTestCase(testify.TestCase):
         testify.assert_equal(type(vm_uuid), type(uuid.uuid4()), 'no uuid set')
 
 
-class ManageUnregisterTestCase(testify.TestCase):
-    @testify.setup
-    def setup_unregistervm(self):
-        self.vm = generate_vm()
-
-    def test_unregistervm_by_name(self):
-        out = Manage.unregistervm(name=self.vm['name'], delete=True)
-        testify.assert_equal(out, '', 'returned non-empty string')
-
-    def test_unregistervm_by_uuid(self):
-        out = Manage.unregistervm(uuid=self.vm['uuid'], delete=True)
-        testify.assert_equal(out, '', 'returned non-empty string')
-
-
-class ManageListVMSTestCase(testify.TestCase):
-    @testify.setup
-    def setup_vm(self):
-        self.vms = []
-        self.vms.append(generate_vm())
-
-    @testify.teardown
-    def cleanup_vm(self):
-        Manage.unregistervm(name=self.vms[0]['name'], delete=True)
-
-    def test_list_vms(self):
-        vms = Manage.list_vms()
-        testify.assert_equal(vms[0]['name'], self.vms[0]['name'],
-                'name mismatch')
-        vm_uuid = uuid.UUID('{%s}' % vms[0]['uuid'])
-        testify.assert_equal(type(vm_uuid), type(uuid.uuid4()), 'no uuid set')
-
-
-class ManageListOSTypesTestCase(testify.TestCase):
-    def test_list_ostypes(self):
-        ostypes = Manage.list_ostypes()
-        testify.assert_equal(ostypes[0]['os_desc'], 'Other/Unknown')
-        testify.assert_equal(ostypes[0]['os_type'], 'Other')
-
-
-class ManageListVMSManyTestCase(testify.TestCase):
-    @testify.setup
-    def setup_vm(self):
-        self.vm0 = generate_vm()
-        self.vm1 = generate_vm()
-        self.vm2 = generate_vm()
-
-    @testify.teardown
-    def cleanup_vm(self):
-        delete_vm(**self.vm0)
-        delete_vm(**self.vm1)
-        delete_vm(**self.vm2)
-
-    def test_list_vms(self):
-        vms = Manage.list_vms()
-        testify.assert_equal(vms[0]['name'], self.vm0['name'],
-                'name mismatch')
-        testify.assert_equal(vms[1]['name'], self.vm1['name'],
-                'name mismatch')
-        testify.assert_equal(vms[2]['name'], self.vm2['name'],
-                'name mismatch')
-
-
-class ManageShowVMInfoTestCase(testify.TestCase):
-    @testify.setup
-    def create_vm(self):
-        self.vm_info = Manage.createvm(name='taco')
-
-    @testify.teardown
-    def destroy_vm(self):
-        Manage.unregistervm(name=self.vm_info['name'], delete=True)
-
-    def test_showvminfo_by_name(self):
-        vm_details = Manage.showvminfo(name=self.vm_info['name'])
-        testify.assert_equal(vm_details['name'], self.vm_info['name'])
-        testify.assert_equal(vm_details['uuid'], self.vm_info['uuid'])
-
-    def test_showvminfo_by_uuid(self):
-        vm_details = Manage.showvminfo(name=self.vm_info['uuid'])
-        testify.assert_equal(vm_details['name'], self.vm_info['name'])
-        testify.assert_equal(vm_details['uuid'], self.vm_info['uuid'])
-
-
-class ManageCreateStorageCTLTestCase(testify.TestCase):
-    @testify.setup
-    def create_vm(self):
-        self.vm_info = Manage.createvm(name='taco')
-
-    @testify.teardown
-    def destroy_vm(self):
-        Manage.unregistervm(name=self.vm_info['name'], delete=True)
-
-    def test_create_storagectl_by_name(self):
-        out = Manage.storagectl_add(vmname=self.vm_info['name'],
-                name='primary', ctl_type='scsi', controller='LSILogic')
-        testify.assert_equal(out, '')
-        out = Manage.storagectl_remove(vmname=self.vm_info['name'],
-                name='primary')
-        testify.assert_equal(out, '')
-
-    def test_create_storagectl_by_uuid(self):
-        out = Manage.storagectl_add(vmname=self.vm_info['uuid'],
-                name='primary', ctl_type='scsi', controller='LSILogic')
-        testify.assert_equal(out, '')
-        out = Manage.storagectl_remove(vmname=self.vm_info['uuid'],
-                name='primary')
-        testify.assert_equal(out, '')
-
-
-class ManageStorageAttachTestCase(testify.TestCase):
-    @testify.setup
-    def create_vm(self):
-        self.vm = generate_vm()
-        self.hdd = generate_hd()
-        self.ctl = generate_ctl(vmname=self.vm['name'])
-
-    @testify.teardown
-    def cleanup_createvm(self):
-        delete_ctl(**self.ctl)
-        delete_hd(**self.hdd)
-        delete_vm(**self.vm)
-
-    def test_storage_attach_by_name(self):
-        out = Manage.storageattach(vmname=self.vm['name'],
-                name=self.ctl['name'], port='0', device='0',
-                storage_type='hdd', medium=self.hdd['filename'])
-        testify.assert_equal(out, '')
-
-    def test_storage_attach_by_uuid(self):
-        out = Manage.storageattach(uuid=self.vm['uuid'],
-                name=self.ctl['name'], port='0', device='0',
-                storage_type='hdd', medium=self.hdd['filename'])
-        testify.assert_equal(out, '')
-
-
-class ManageCreateHDTestCase(testify.TestCase):
-    @testify.setup
-    def setup_hd_info(self):
-        self.hd_size = '128'
-        self.hd_format = 'VDI'
-        self.hd_variant = 'Standard'
-        self.hd_filename = '/tmp/test.vdi'
-
-    @testify.teardown
-    def destory_hdd(self):
-        delete_hd(filename=self.hd_filename)
-
-    def test_createhd(self):
-        hd_info = Manage.createhd(filename=self.hd_filename, size=self.hd_size,
-                format=self.hd_format, variant=self.hd_variant)
-        # TODO: remove once we figure out why we get a bad uuid returned
-        try:
-            hd_uuid = uuid.UUID('{%s}' % hd_info['uuid'])
-        except:
-            logger.error('fucked up uuid? %r' % hd_info)
-            raise
-        testify.assert_equal(type(hd_uuid), type(uuid.uuid4()), 'no uuid set')
-        testify.assert_equal(os.path.exists(self.hd_filename), True,
-                'created file does not exist')
-
-
-class ManageShowHDInfoTestCase(testify.TestCase):
-    @testify.setup
-    def create_hd(self):
-        self.hdd = generate_hd()
-
-    @testify.teardown
-    def destory_hdd(self):
-        delete_hd(**self.hdd)
-
-    def test_showhdinfo_by_filename(self):
-        hd_info = Manage.showhdinfo(filename=self.hdd['filename'])
-        logical_size = '%s MBytes' % self.hdd['size']
-        testify.assert_equal(hd_info['logical_size'], logical_size,
-                'logical size mismatch')
-        testify.assert_equal(hd_info['location'], self.hdd['filename'],
-                'filename/location mismatch')
-        testify.assert_equal(hd_info['storage_format'], self.hdd['format'],
-                'storage format mismatch')
-
-
-class ManageCloseMediumTestCase(testify.TestCase):
-    @testify.setup
-    def setup(self):
-        self.vm = generate_vm()
-        self.hdd = generate_hd()
-
-    @testify.teardown
-    def teardown(self):
-        delete_hd(**self.hdd)
-        delete_vm(**self.vm)
-
-#    def test_closemedium_disk_by_filename(self):
-#        out = Manage.closemedium(medium_type='disk',
-#                filename=self.hdd['filename'], delete=True)
-#        print out
-
-
-class ManageListOsTypes(testify.TestCase):
-    """Incomplete
-    """
-
-
 class ManageModifyVMTestCase(testify.TestCase):
     """ Incomplete in the sense that I don't want to write tests for every
         option at this point.
@@ -296,7 +182,116 @@ class ManageModifyVMTestCase(testify.TestCase):
         testify.assert_equal(self.new_name, vm_info['name'])
 
 
-class ManageVersionTestCase(testify.TestCase):
-    def test_version(self):
-        out = Manage.version()
-        testify.assert_equal(bool(out['version']), True)
+class ManageCloseMediumTestCase(testify.TestCase):
+    @testify.setup
+    def setup(self):
+        self.vm = generate_vm()
+        self.hdd = generate_hd()
+
+    @testify.teardown
+    def teardown(self):
+        delete_hd(**self.hdd)
+        delete_vm(**self.vm)
+
+#    def test_closemedium_disk_by_filename(self):
+#        out = Manage.closemedium(medium_type='disk',
+#                filename=self.hdd['filename'], delete=True)
+#        print out
+
+
+class ManageStorageAttachTestCase(testify.TestCase):
+    @testify.setup
+    def create_vm(self):
+        self.vm = generate_vm()
+        self.hdd = generate_hd()
+        self.ctl = generate_ctl(vmname=self.vm['name'])
+
+    @testify.teardown
+    def cleanup_createvm(self):
+        delete_ctl(**self.ctl)
+        delete_hd(**self.hdd)
+        delete_vm(**self.vm)
+
+    def test_storage_attach_by_name(self):
+        out = Manage.storageattach(vmname=self.vm['name'],
+                name=self.ctl['name'], port='0', device='0',
+                storage_type='hdd', medium=self.hdd['filename'])
+        testify.assert_equal(out, '')
+
+    def test_storage_attach_by_uuid(self):
+        out = Manage.storageattach(uuid=self.vm['uuid'],
+                name=self.ctl['name'], port='0', device='0',
+                storage_type='hdd', medium=self.hdd['filename'])
+        testify.assert_equal(out, '')
+
+
+class ManageCreateStorageCTLTestCase(testify.TestCase):
+    @testify.setup
+    def create_vm(self):
+        self.vm_info = Manage.createvm(name='taco')
+
+    @testify.teardown
+    def destroy_vm(self):
+        Manage.unregistervm(name=self.vm_info['name'], delete=True)
+
+    def test_create_storagectl_by_name(self):
+        out = Manage.storagectl_add(vmname=self.vm_info['name'],
+                name='primary', ctl_type='scsi', controller='LSILogic')
+        testify.assert_equal(out, '')
+        out = Manage.storagectl_remove(vmname=self.vm_info['name'],
+                name='primary')
+        testify.assert_equal(out, '')
+
+    def test_create_storagectl_by_uuid(self):
+        out = Manage.storagectl_add(vmname=self.vm_info['uuid'],
+                name='primary', ctl_type='scsi', controller='LSILogic')
+        testify.assert_equal(out, '')
+        out = Manage.storagectl_remove(vmname=self.vm_info['uuid'],
+                name='primary')
+        testify.assert_equal(out, '')
+
+
+class ManageShowHDInfoTestCase(testify.TestCase):
+    @testify.setup
+    def create_hd(self):
+        self.hdd = generate_hd()
+
+    @testify.teardown
+    def destory_hdd(self):
+        delete_hd(**self.hdd)
+
+    def test_showhdinfo_by_filename(self):
+        hd_info = Manage.showhdinfo(filename=self.hdd['filename'])
+        logical_size = '%s MBytes' % self.hdd['size']
+        testify.assert_equal(hd_info['logical_size'], logical_size,
+                'logical size mismatch')
+        testify.assert_equal(hd_info['location'], self.hdd['filename'],
+                'filename/location mismatch')
+        testify.assert_equal(hd_info['storage_format'], self.hdd['format'],
+                'storage format mismatch')
+
+
+class ManageCreateHDTestCase(testify.TestCase):
+    @testify.setup
+    def setup_hd_info(self):
+        self.hd_size = '128'
+        self.hd_format = 'VDI'
+        self.hd_variant = 'Standard'
+        self.hd_filename = '/tmp/test.vdi'
+
+    @testify.teardown
+    def destory_hdd(self):
+        delete_hd(filename=self.hd_filename)
+
+    def test_createhd(self):
+        hd_info = Manage.createhd(filename=self.hd_filename, size=self.hd_size,
+                format=self.hd_format, variant=self.hd_variant)
+        # TODO: remove once we figure out why we get a bad uuid returned
+        try:
+            hd_uuid = uuid.UUID('{%s}' % hd_info['uuid'])
+        except:
+            logger.error('fucked up uuid? %r' % hd_info)
+            raise
+        testify.assert_equal(type(hd_uuid), type(uuid.uuid4()), 'no uuid set')
+        testify.assert_equal(os.path.exists(self.hd_filename), True,
+                'created file does not exist')
