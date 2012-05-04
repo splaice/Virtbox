@@ -248,14 +248,14 @@ class Manage(object):
             hwvirtex=None, hwvirtexexcl=None, nestedpaging=None,
             largepages=None, vtxvpid=None, synthcpu=None, cpuidset=None,
             cpuidremove=None, cpuidremoveall=False, hardwareuuid=None,
-            cpus=None, cpuhotplug=None, cpuexectioncap=None, rtcuseutc=None,
-            monitorcount=None, acclerate3d=None, accelerate2dvideo=None,
-            firmware=None, chipset=None, bioslogofadein=None,
-            bioslogofadeout=None, bioslogodisplaytime=None,
-            bioslogoimagepath=None, biosbootmenu=None,
-            biossystemtimeoffset=None, biospxedebug=None, boot1=None,
-            boot2=None, boot3=None, boot4=None, nic1=None, nic2=None,
-            nic3=None, nic4=None, nic5=None, nic6=None, nic7=None,
+            cpus=None, plugcpu=None, unplugcpu=None, cpuhotplug=None,
+            cpuexecutioncap=None, rtcuseutc=None, monitorcount=None,
+            accelerate3d=None, accelerate2dvideo=None, firmware=None,
+            chipset=None, bioslogofadein=None, bioslogofadeout=None,
+            bioslogodisplaytime=None, bioslogoimagepath=None,
+            biosbootmenu=None, biossystemtimeoffset=None, biospxedebug=None,
+            boot1=None, boot2=None, boot3=None, boot4=None, nic1=None,
+            nic2=None, nic3=None, nic4=None, nic5=None, nic6=None, nic7=None,
             nictype1=None, nictype2=None, nictype3=None, nictype4=None,
             nictype5=None, nictype6=None, nictype7=None, cabelconnected1=None,
             cabelconnected2=None, cabelconnected3=None, cabelconnected4=None,
@@ -288,9 +288,9 @@ class Manage(object):
             natnet5=None, natnet6=None, natnet7=None,
             nicgenericdrv1=None, nicgenericdrv2=None, nicgenericdrv3=None,
             nicgenericdrv4=None, nicgenericdrv5=None, nicgenericdrv6=None,
-            nicgenericdrv7=None, netsettings1=None, netsettings2=None,
-            netsettings3=None, netsettings4=None, netsettings5=None,
-            netsettings6=None, netsettings7=None, natpf1=None, natpf2=None,
+            nicgenericdrv7=None, natsettings1=None, natsettings2=None,
+            natsettings3=None, natsettings4=None, natsettings5=None,
+            natsettings6=None, natsettings7=None, natpf1=None, natpf2=None,
             natpf3=None, natpf4=None, natpf5=None, natpf6=None, natpf7=None,
             nattftpprefix1=None, nattftpprefix2=None, nattftpprefix3=None,
             nattftpprefix4=None, nattftpprefix5=None, nattftpprefix6=None,
@@ -336,6 +336,468 @@ class Manage(object):
 
         if new_name:
             cmd = '%s --name %s' % (cmd, new_name)
+
+        if ostype:
+            cmd = '%s --ostype %s' % (cmd, ostype)
+
+        if memory:
+            cmd = '%s --memory %s' % (cmd, memory)
+
+        if pagefusion:
+            cmd = '%s --pagefusion %s' % (cmd, pagefusion)
+
+        if vram:
+            cmd = '%s --vram %s' % (cmd, vram)
+
+        if acpi:
+            cmd = '%s --acpi %s' % (cmd, acpi)
+
+        if pciattach:
+            cmd = '%s --pciattach %s' % (cmd, pciattach)
+
+        if pcidetach:
+            cmd = '%s --pcidetach %s' % (cmd, pcidetach)
+
+        if ioapic:
+            cmd = '%s --ioapic' % (cmd, ioapic)
+
+        if pae:
+            cmd = '%s --pae %s' % (cmd, pae)
+
+        if hpet:
+            cmd = '%s --hpet %s' % (cmd, hpet)
+
+        if hwvirtex:
+            cmd = '%s --hwvirtex %s' % (cmd, hwvirtex)
+
+        if hwvirtexexcl:
+            cmd = '%s --hwvirtexexcl %s' % (cmd, hwvirtexexcl)
+
+        if nestedpaging:
+            cmd = '%s --nestedpaging %s' % (cmd, nestedpaging)
+
+        if largepages:
+            cmd = '%s --largepages %s' % (cmd, largepages)
+
+        if vtxvpid:
+            cmd = '%s --vtxvpid %s' % (cmd, vtxvpid)
+
+        if synthcpu:
+            cmd = '%s --synthcpu %s' % (cmd, synthcpu)
+
+        if cpuidset:
+            cmd = '%s --cpuidset %s' % (cmd, cpuidset)
+
+        if cpuidremove:
+            cmd = '%s --cpuidremove %s' % (cmd, cpuidremove)
+
+        if cpuidremoveall:
+            cmd = '%s --cpuidremoveall %s' % (cmd, cpuidremoveall)
+
+        if hardwareuuid:
+            cmd = '%s --hardwareuuid %s' % (cmd, hardwareuuid)
+
+        if cpus:
+            cmd = '%s --cpus %s' % (cmd, cpus)
+
+        if cpuhotplug:
+            cmd = '%s --cpuhotplug %s' % (cmd, cpuhotplug)
+
+        if plugcpu:
+            cmd = '%s --plugcpu %s' % (cmd, plugcpu)
+
+        if unplugcpu:
+            cmd = '%s --unplugcpu %s' % (cmd, unplugcpu)
+
+        if cpuexecutioncap:
+            cmd = '%s --cpuexecutioncap %s' % (cmd, cpuexecutioncap)
+
+        if rtcuseutc:
+            cmd = '%s --rtcuseutc %s' % (cmd, rtcuseutc)
+
+        if monitorcount:
+            cmd = '%s --monitorcount %s' % (cmd, monitorcount)
+
+        if accelerate3d:
+            cmd = '%s --accelerate3d %s' % (cmd, accelerate3d)
+
+        if accelerate2dvideo:
+            cmd = '%s --accelerate2dvideo %s' % (cmd, accelerate2dvideo)
+
+        if firmware:
+            cmd = '%s --firmware %s' % (cmd, firmware)
+
+        if chipset:
+            cmd = '%s --chipset %s' % (cmd, chipset)
+
+        if bioslogofadein:
+            cmd = '%s --bioslogofadein %s' % (cmd, bioslogofadein)
+
+        if bioslogofadeout:
+            cmd = '%s --bioslogofadeout %s' % (cmd, bioslogofadeout)
+
+        if bioslogodisplaytime:
+            cmd = '%s --bioslogodisplaytime %s' % (cmd, bioslogodisplaytime)
+
+        if bioslogoimagepath:
+            cmd = '%s --bioslogoimagepath %s' % (cmd, bioslogoimagepath)
+
+        if biosbootmenu:
+            cmd = '%s --biosbootmenu %s' % (cmd, biosbootmenu)
+
+        if biossystemtimeoffset:
+            cmd = '%s --biossystemtimeoffset %s' % (cmd, biossystemtimeoffset)
+
+        if biospxedebug:
+            cmd = '%s --biospxedebug %s' % (cmd, biospxedebug)
+
+        if boot1:
+            cmd = '%s --boot1 %s' (cmd, boot1)
+
+        if boot2:
+            cmd = '%s --boot2 %s' (cmd, boot2)
+
+        if boot3:
+            cmd = '%s --boot3 %s' (cmd, boot3)
+
+        if boot4:
+            cmd = '%s --boot4 %s' (cmd, boot4)
+
+        if nic1:
+            cmd = '%s --nic1 %s' (cmd, nic1)
+
+        if nic2:
+            cmd = '%s --nic2 %s' (cmd, nic2)
+
+        if nic3:
+            cmd = '%s --nic3 %s' (cmd, nic3)
+
+        if nic4:
+            cmd = '%s --nic4 %s' (cmd, nic4)
+
+        if nic5:
+            cmd = '%s --nic5 %s' (cmd, nic5)
+
+        if nic6:
+            cmd = '%s --nic6 %s' (cmd, nic6)
+
+        if nic7:
+            cmd = '%s --nic7 %s' (cmd, nic7)
+
+        if nictype1:
+            cmd = '%s --nictype1 %s' (cmd, nictype1)
+
+        if nictype2:
+            cmd = '%s --nictype2 %s' (cmd, nictype2)
+
+        if nictype3:
+            cmd = '%s --nictype3 %s' (cmd, nictype3)
+
+        if nictype4:
+            cmd = '%s --nictype4 %s' (cmd, nictype4)
+
+        if nictype5:
+            cmd = '%s --nictype5 %s' (cmd, nictype5)
+
+        if nictype6:
+            cmd = '%s --nictype6 %s' (cmd, nictype6)
+
+        if nictype7:
+            cmd = '%s --nictype7 %s' (cmd, nictype7)
+
+        if cabelconnected1:
+            cmd = '%s --cabelconnected1 %s' (cmd, cabelconnected1)
+
+        if cabelconnected2:
+            cmd = '%s --cabelconnected2 %s' (cmd, cabelconnected2)
+
+        if cabelconnected3:
+            cmd = '%s --cabelconnected3 %s' (cmd, cabelconnected3)
+
+        if cabelconnected4:
+            cmd = '%s --cabelconnected4 %s' (cmd, cabelconnected4)
+
+        if cabelconnected5:
+            cmd = '%s --cabelconnected5 %s' (cmd, cabelconnected5)
+
+        if cabelconnected6:
+            cmd = '%s --cabelconnected6 %s' (cmd, cabelconnected6)
+
+        if cabelconnected7:
+            cmd = '%s --cabelconnected7 %s' (cmd, cabelconnected7)
+
+        if nictrace1:
+            cmd = '%s --nictrace1 %s' (cmd, nictrace1)
+
+        if nictrace2:
+            cmd = '%s --nictrace2 %s' (cmd, nictrace2)
+
+        if nictrace3:
+            cmd = '%s --nictrace3 %s' (cmd, nictrace3)
+
+        if nictrace4:
+            cmd = '%s --nictrace4 %s' (cmd, nictrace4)
+
+        if nictrace5:
+            cmd = '%s --nictrace5 %s' (cmd, nictrace5)
+
+        if nictrace6:
+            cmd = '%s --nictrace6 %s' (cmd, nictrace6)
+
+        if nictrace7:
+            cmd = '%s --nictrace7 %s' (cmd, nictrace7)
+
+        if nictracefile1:
+            cmd = '%s --nictracefile1 %s' (cmd, nictracefile1)
+
+        if nictracefile2:
+            cmd = '%s --nictracefile2 %s' (cmd, nictracefile2)
+
+        if nictracefile3:
+            cmd = '%s --nictracefile3 %s' (cmd, nictracefile3)
+
+        if nictracefile4:
+            cmd = '%s --nictracefile4 %s' (cmd, nictracefile4)
+
+        if nictracefile5:
+            cmd = '%s --nictracefile5 %s' (cmd, nictracefile5)
+
+        if nictracefile6:
+            cmd = '%s --nictracefile6 %s' (cmd, nictracefile6)
+
+        if nictracefile7:
+            cmd = '%s --nictracefile7 %s' (cmd, nictracefile7)
+
+        if nicproperty1:
+            cmd = '%s --nicproperty1 %s' (cmd, nicproperty1)
+
+        if nicproperty2:
+            cmd = '%s --nicproperty2 %s' (cmd, nicproperty2)
+
+        if nicproperty3:
+            cmd = '%s --nicproperty3 %s' (cmd, nicproperty3)
+
+        if nicproperty4:
+            cmd = '%s --nicproperty4 %s' (cmd, nicproperty4)
+
+        if nicproperty5:
+            cmd = '%s --nicproperty5 %s' (cmd, nicproperty5)
+
+        if nicproperty6:
+            cmd = '%s --nicproperty6 %s' (cmd, nicproperty6)
+
+        if nicproperty7:
+            cmd = '%s --nicproperty7 %s' (cmd, nicproperty7)
+
+        if nicspeed1:
+            cmd = '%s --nicspeed1 %s' (cmd, nicspeed1)
+
+        if nicspeed2:
+            cmd = '%s --nicspeed2 %s' (cmd, nicspeed2)
+
+        if nicspeed3:
+            cmd = '%s --nicspeed3 %s' (cmd, nicspeed3)
+
+        if nicspeed4:
+            cmd = '%s --nicspeed4 %s' (cmd, nicspeed4)
+
+        if nicspeed5:
+            cmd = '%s --nicspeed5 %s' (cmd, nicspeed5)
+
+        if nicspeed6:
+            cmd = '%s --nicspeed6 %s' (cmd, nicspeed6)
+
+        if nicspeed7:
+            cmd = '%s --nicspeed7 %s' (cmd, nicspeed7)
+
+        if nicbootprio1:
+            cmd = '%s --nicbootprio1 %s' (cmd, nicbootprio1)
+
+        if nicbootprio2:
+            cmd = '%s --nicbootprio2 %s' (cmd, nicbootprio2)
+
+        if nicbootprio3:
+            cmd = '%s --nicbootprio3 %s' (cmd, nicbootprio3)
+
+        if nicbootprio4:
+            cmd = '%s --nicbootprio4 %s' (cmd, nicbootprio4)
+
+        if nicbootprio5:
+            cmd = '%s --nicbootprio5 %s' (cmd, nicbootprio5)
+
+        if nicbootprio6:
+            cmd = '%s --nicbootprio6 %s' (cmd, nicbootprio6)
+
+        if nicbootprio7:
+            cmd = '%s --nicbootprio7 %s' (cmd, nicbootprio7)
+
+        if nicpromisc1:
+            cmd = '%s --nicpromisc1 %s' (cmd, nicpromisc1)
+
+        if nicpromisc2:
+            cmd = '%s --nicpromisc2 %s' (cmd, nicpromisc2)
+
+        if nicpromisc3:
+            cmd = '%s --nicpromisc3 %s' (cmd, nicpromisc3)
+
+        if nicpromisc4:
+            cmd = '%s --nicpromisc4 %s' (cmd, nicpromisc4)
+
+        if nicpromisc5:
+            cmd = '%s --nicpromisc5 %s' (cmd, nicpromisc5)
+
+        if nicpromisc6:
+            cmd = '%s --nicpromisc6 %s' (cmd, nicpromisc6)
+
+        if nicpromisc7:
+            cmd = '%s --nicpromisc7 %s' (cmd, nicpromisc7)
+
+        if nicbandwidthgroup1:
+            cmd = '%s --nicbandwidthgroup1 %s' (cmd, nicbandwidthgroup1)
+
+        if nicbandwidthgroup2:
+            cmd = '%s --nicbandwidthgroup2 %s' (cmd, nicbandwidthgroup2)
+
+        if nicbandwidthgroup3:
+            cmd = '%s --nicbandwidthgroup3 %s' (cmd, nicbandwidthgroup3)
+
+        if nicbandwidthgroup4:
+            cmd = '%s --nicbandwidthgroup4 %s' (cmd, nicbandwidthgroup4)
+
+        if nicbandwidthgroup5:
+            cmd = '%s --nicbandwidthgroup5 %s' (cmd, nicbandwidthgroup5)
+
+        if nicbandwidthgroup6:
+            cmd = '%s --nicbandwidthgroup6 %s' (cmd, nicbandwidthgroup6)
+
+        if nicbandwidthgroup7:
+            cmd = '%s --nicbandwidthgroup7 %s' (cmd, nicbandwidthgroup7)
+
+        if bridgeadapter1:
+            cmd = '%s --bridgeadapter1 %s' (cmd, bridgeadapter1)
+
+        if bridgeadapter2:
+            cmd = '%s --bridgeadapter2 %s' (cmd, bridgeadapter2)
+
+        if bridgeadapter3:
+            cmd = '%s --bridgeadapter3 %s' (cmd, bridgeadapter3)
+
+        if bridgeadapter4:
+            cmd = '%s --bridgeadapter4 %s' (cmd, bridgeadapter4)
+
+        if bridgeadapter5:
+            cmd = '%s --bridgeadapter5 %s' (cmd, bridgeadapter5)
+
+        if bridgeadapter6:
+            cmd = '%s --bridgeadapter6 %s' (cmd, bridgeadapter6)
+
+        if bridgeadapter7:
+            cmd = '%s --bridgeadapter7 %s' (cmd, bridgeadapter7)
+
+        if hostonlyadapter1:
+            cmd = '%s --hostonlyadapter1 %s' (cmd, hostonlyadapter1)
+
+        if hostonlyadapter2:
+            cmd = '%s --hostonlyadapter2 %s' (cmd, hostonlyadapter2)
+
+        if hostonlyadapter3:
+            cmd = '%s --hostonlyadapter3 %s' (cmd, hostonlyadapter3)
+
+        if hostonlyadapter4:
+            cmd = '%s --hostonlyadapter4 %s' (cmd, hostonlyadapter4)
+
+        if hostonlyadapter5:
+            cmd = '%s --hostonlyadapter5 %s' (cmd, hostonlyadapter5)
+
+        if hostonlyadapter6:
+            cmd = '%s --hostonlyadapter6 %s' (cmd, hostonlyadapter6)
+
+        if hostonlyadapter7:
+            cmd = '%s --hostonlyadapter7 %s' (cmd, hostonlyadapter7)
+
+        if intnet1:
+            cmd = '%s --intnet1 %s' (cmd, intnet1)
+
+        if intnet2:
+            cmd = '%s --intnet2 %s' (cmd, intnet2)
+
+        if intnet3:
+            cmd = '%s --intnet3 %s' (cmd, intnet3)
+
+        if intnet4:
+            cmd = '%s --intnet4 %s' (cmd, intnet4)
+
+        if intnet5:
+            cmd = '%s --intnet5 %s' (cmd, intnet5)
+
+        if intnet6:
+            cmd = '%s --intnet6 %s' (cmd, intnet6)
+
+        if intnet7:
+            cmd = '%s --intnet7 %s' (cmd, intnet7)
+
+        if natnet1:
+            cmd = '%s --natnet1 %s' (cmd, natnet1)
+
+        if natnet2:
+            cmd = '%s --natnet2 %s' (cmd, natnet2)
+
+        if natnet3:
+            cmd = '%s --natnet3 %s' (cmd, natnet3)
+
+        if natnet4:
+            cmd = '%s --natnet4 %s' (cmd, natnet4)
+
+        if natnet5:
+            cmd = '%s --natnet5 %s' (cmd, natnet5)
+
+        if natnet6:
+            cmd = '%s --natnet6 %s' (cmd, natnet6)
+
+        if natnet7:
+            cmd = '%s --natnet7 %s' (cmd, natnet7)
+
+        if nicgenericdrv1:
+            cmd = '%s --nicgenericdrv1 %s' (cmd, nicgenericdrv1)
+
+        if nicgenericdrv2:
+            cmd = '%s --nicgenericdrv2 %s' (cmd, nicgenericdrv2)
+
+        if nicgenericdrv3:
+            cmd = '%s --nicgenericdrv3 %s' (cmd, nicgenericdrv3)
+
+        if nicgenericdrv4:
+            cmd = '%s --nicgenericdrv4 %s' (cmd, nicgenericdrv4)
+
+        if nicgenericdrv5:
+            cmd = '%s --nicgenericdrv5 %s' (cmd, nicgenericdrv5)
+
+        if nicgenericdrv6:
+            cmd = '%s --nicgenericdrv6 %s' (cmd, nicgenericdrv6)
+
+        if nicgenericdrv7:
+            cmd = '%s --nicgenericdrv7 %s' (cmd, nicgenericdrv7)
+
+        if natsettings1:
+            cmd = '%s --natsettings1 %s' (cmd, natsettings1)
+
+        if natsettings2:
+            cmd = '%s --natsettings2 %s' (cmd, natsettings2)
+
+        if natsettings3:
+            cmd = '%s --natsettings3 %s' (cmd, natsettings3)
+
+        if natsettings4:
+            cmd = '%s --natsettings4 %s' (cmd, natsettings4)
+
+        if natsettings5:
+            cmd = '%s --natsettings5 %s' (cmd, natsettings5)
+
+        if natsettings6:
+            cmd = '%s --natsettings6 %s' (cmd, natsettings6)
+
+        if natsettings7:
+            cmd = '%s --natsettings7 %s' (cmd, natsettings7)
 
         stdout, stderr = run_cmd(cmd)
         return parse_modifyvm(stdout, stderr)
