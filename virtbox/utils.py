@@ -76,7 +76,7 @@ def generate_hd(**kwargs):
     from .models import Manage
     filename = '%s.vdi' % id_generator()
     data = {'size': '128',
-            'format': 'VDI',
+            'hd_format': 'VDI',
             'variant': 'Standard',
             'filename': os.path.join('/tmp', filename)}
     data.update(kwargs)

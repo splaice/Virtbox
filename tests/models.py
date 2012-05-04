@@ -267,7 +267,7 @@ class ManageShowHDInfoTestCase(testify.TestCase):
                 'logical size mismatch')
         testify.assert_equal(hd_info['location'], self.hdd['filename'],
                 'filename/location mismatch')
-        testify.assert_equal(hd_info['storage_format'], self.hdd['format'],
+        testify.assert_equal(hd_info['storage_format'], self.hdd['hd_format'],
                 'storage format mismatch')
 
 
