@@ -316,7 +316,7 @@ class Manage(object):
             macaddress3=None, macaddress4=None, macaddress5=None,
             macaddress6=None, macaddress7=None, mouse=None, keyboard=None,
             uart1=None, uart2=None, uartmode1=None, uartmode2=None,
-            guestmemoryballon=None, gueststatisticsinterval=None,
+            guestmemoryballoon=None, gueststatisticsinterval=None,
             audio=None, audiocontroller=None, clipboard=None, vrde=None,
             vrdeextpack=None, vrdeproperty=None, vrdeport=None,
             vrdeaddress=None, vrdeauthtype=None, vrdeauthlibrary=None,
@@ -798,6 +798,339 @@ class Manage(object):
 
         if natsettings7:
             cmd = '%s --natsettings7 %s' (cmd, natsettings7)
+
+        if natpf1:
+            cmd = '%s --natpf1 %s' (cmd, natpf1)
+
+        if natpf2:
+            cmd = '%s --natpf2 %s' (cmd, natpf2)
+
+        if natpf3:
+            cmd = '%s --natpf3 %s' (cmd, natpf3)
+
+        if natpf4:
+            cmd = '%s --natpf4 %s' (cmd, natpf4)
+
+        if natpf5:
+            cmd = '%s --natpf5 %s' (cmd, natpf5)
+
+        if natpf6:
+            cmd = '%s --natpf6 %s' (cmd, natpf6)
+
+        if natpf7:
+            cmd = '%s --natpf7 %s' (cmd, natpf7)
+
+        if nattftpprefix1:
+            cmd = '%s --nattftpprefix1 %s' (cmd, nattftpprefix1)
+
+        if nattftpprefix2:
+            cmd = '%s --nattftpprefix2 %s' (cmd, nattftpprefix2)
+
+        if nattftpprefix3:
+            cmd = '%s --nattftpprefix3 %s' (cmd, nattftpprefix3)
+
+        if nattftpprefix4:
+            cmd = '%s --nattftpprefix4 %s' (cmd, nattftpprefix4)
+
+        if nattftpprefix5:
+            cmd = '%s --nattftpprefix5 %s' (cmd, nattftpprefix5)
+
+        if nattftpprefix6:
+            cmd = '%s --nattftpprefix6 %s' (cmd, nattftpprefix6)
+
+        if nattftpprefix7:
+            cmd = '%s --nattftpprefix7 %s' (cmd, nattftpprefix7)
+
+        if nattftpfile1:
+            cmd = '%s --nattftpfile1 %s' (cmd, nattftpfile1)
+
+        if nattftpfile2:
+            cmd = '%s --nattftpfile2 %s' (cmd, nattftpfile2)
+
+        if nattftpfile3:
+            cmd = '%s --nattftpfile3 %s' (cmd, nattftpfile3)
+
+        if nattftpfile4:
+            cmd = '%s --nattftpfile4 %s' (cmd, nattftpfile4)
+
+        if nattftpfile5:
+            cmd = '%s --nattftpfile5 %s' (cmd, nattftpfile5)
+
+        if nattftpfile6:
+            cmd = '%s --nattftpfile6 %s' (cmd, nattftpfile6)
+
+        if nattftpfile7:
+            cmd = '%s --nattftpfile7 %s' (cmd, nattftpfile7)
+
+        # nattftpserver
+        if nattftpserver1:
+            cmd = '%s --nattftpserver1 %s' (cmd, nattftpserver1)
+
+        if nattftpserver2:
+            cmd = '%s --nattftpserver2 %s' (cmd, nattftpserver2)
+
+        if nattftpserver3:
+            cmd = '%s --nattftpserver3 %s' (cmd, nattftpserver3)
+
+        if nattftpserver4:
+            cmd = '%s --nattftpserver4 %s' (cmd, nattftpserver4)
+
+        if nattftpserver5:
+            cmd = '%s --nattftpserver5 %s' (cmd, nattftpserver5)
+
+        if nattftpserver6:
+            cmd = '%s --nattftpserver6 %s' (cmd, nattftpserver6)
+
+        if nattftpserver7:
+            cmd = '%s --nattftpserver7 %s' (cmd, nattftpserver7)
+
+        # natbindip
+        if natbindip1:
+            cmd = '%s --natbindip1 %s' (cmd, natbindip1)
+
+        if natbindip2:
+            cmd = '%s --natbindip2 %s' (cmd, natbindip2)
+
+        if natbindip3:
+            cmd = '%s --natbindip3 %s' (cmd, natbindip3)
+
+        if natbindip4:
+            cmd = '%s --natbindip4 %s' (cmd, natbindip4)
+
+        if natbindip5:
+            cmd = '%s --natbindip5 %s' (cmd, natbindip5)
+
+        if natbindip6:
+            cmd = '%s --natbindip6 %s' (cmd, natbindip6)
+
+        if natbindip7:
+            cmd = '%s --natbindip7 %s' (cmd, natbindip7)
+
+        # natdnspassdomain
+        if natdnspassdomain1:
+            cmd = '%s --natdnspassdomain1 %s' (cmd, natdnspassdomain1)
+
+        if natdnspassdomain2:
+            cmd = '%s --natdnspassdomain2 %s' (cmd, natdnspassdomain2)
+
+        if natdnspassdomain3:
+            cmd = '%s --natdnspassdomain3 %s' (cmd, natdnspassdomain3)
+
+        if natdnspassdomain4:
+            cmd = '%s --natdnspassdomain4 %s' (cmd, natdnspassdomain4)
+
+        if natdnspassdomain5:
+            cmd = '%s --natdnspassdomain5 %s' (cmd, natdnspassdomain5)
+
+        if natdnspassdomain6:
+            cmd = '%s --natdnspassdomain6 %s' (cmd, natdnspassdomain6)
+
+        if natdnspassdomain7:
+            cmd = '%s --natdnspassdomain7 %s' (cmd, natdnspassdomain7)
+
+        # natdnsproxy
+        if natdnsproxy1:
+            cmd = '%s --natdnsproxy1 %s' (cmd, natdnsproxy1)
+
+        if natdnsproxy2:
+            cmd = '%s --natdnsproxy2 %s' (cmd, natdnsproxy2)
+
+        if natdnsproxy3:
+            cmd = '%s --natdnsproxy3 %s' (cmd, natdnsproxy3)
+
+        if natdnsproxy4:
+            cmd = '%s --natdnsproxy4 %s' (cmd, natdnsproxy4)
+
+        if natdnsproxy5:
+            cmd = '%s --natdnsproxy5 %s' (cmd, natdnsproxy5)
+
+        if natdnsproxy6:
+            cmd = '%s --natdnsproxy6 %s' (cmd, natdnsproxy6)
+
+        if natdnsproxy7:
+            cmd = '%s --natdnsproxy7 %s' (cmd, natdnsproxy7)
+
+        # natdnshostresolver
+        if natdnshostresolver1:
+            cmd = '%s --natdnshostresolver1 %s' (cmd, natdnshostresolver1)
+
+        if natdnshostresolver2:
+            cmd = '%s --natdnshostresolver2 %s' (cmd, natdnshostresolver2)
+
+        if natdnshostresolver3:
+            cmd = '%s --natdnshostresolver3 %s' (cmd, natdnshostresolver3)
+
+        if natdnshostresolver4:
+            cmd = '%s --natdnshostresolver4 %s' (cmd, natdnshostresolver4)
+
+        if natdnshostresolver5:
+            cmd = '%s --natdnshostresolver5 %s' (cmd, natdnshostresolver5)
+
+        if natdnshostresolver6:
+            cmd = '%s --natdnshostresolver6 %s' (cmd, natdnshostresolver6)
+
+        if natdnshostresolver7:
+            cmd = '%s --natdnshostresolver7 %s' (cmd, natdnshostresolver7)
+
+        # nataliasmode
+        if nataliasmode1:
+            cmd = '%s --nataliasmode1 %s' (cmd, nataliasmode1)
+
+        if nataliasmode2:
+            cmd = '%s --nataliasmode2 %s' (cmd, nataliasmode2)
+
+        if nataliasmode3:
+            cmd = '%s --nataliasmode3 %s' (cmd, nataliasmode3)
+
+        if nataliasmode4:
+            cmd = '%s --nataliasmode4 %s' (cmd, nataliasmode4)
+
+        if nataliasmode5:
+            cmd = '%s --nataliasmode5 %s' (cmd, nataliasmode5)
+
+        if nataliasmode6:
+            cmd = '%s --nataliasmode6 %s' (cmd, nataliasmode6)
+
+        if nataliasmode7:
+            cmd = '%s --nataliasmode7 %s' (cmd, nataliasmode7)
+
+        # macaddress
+        if macaddress1:
+            cmd = '%s --macaddress1 %s' (cmd, macaddress1)
+
+        if macaddress2:
+            cmd = '%s --macaddress2 %s' (cmd, macaddress2)
+
+        if macaddress3:
+            cmd = '%s --macaddress3 %s' (cmd, macaddress3)
+
+        if macaddress4:
+            cmd = '%s --macaddress4 %s' (cmd, macaddress4)
+
+        if macaddress5:
+            cmd = '%s --macaddress5 %s' (cmd, macaddress5)
+
+        if macaddress6:
+            cmd = '%s --macaddress6 %s' (cmd, macaddress6)
+
+        if macaddress7:
+            cmd = '%s --macaddress7 %s' (cmd, macaddress7)
+
+        # mouse
+        if mouse:
+            cmd = '%s --mouse %s' (cmd, mouse)
+
+        # keyboard
+        if keyboard:
+            cmd = '%s --keyboard %s' (cmd, keyboard)
+
+        # uart
+        if uart1:
+            cmd = '%s --uart1 %s' (cmd, uart1)
+
+        if uart2:
+            cmd = '%s --uart2 %s' (cmd, uart2)
+
+        # uartmode
+        if uartmode1:
+            cmd = '%s --uartmode1 %s' (cmd, uartmode1)
+
+        if uartmode2:
+            cmd = '%s --uartmode2 %s' (cmd, uartmode2)
+
+        # guestmemoryballoon
+        if guestmemoryballoon:
+            cmd = '%s --guestmemoryballoon %s' (cmd, guestmemoryballoon)
+
+        # gueststatisticsinterval
+        if gueststatisticsinterval:
+            cmd = '%s --gueststatisticsinterval %s' (cmd,
+                    gueststatisticsinterval)
+
+        # audio
+        if audio:
+            cmd = '%s --audio %s' (cmd, audio)
+
+        # audiocontroller
+        if audiocontroller:
+            cmd = '%s --audiocontroller %s' (cmd, audiocontroller)
+
+        # clipboard
+        if clipboard:
+            cmd = '%s --clipboard %s' (cmd, clipboard)
+
+        # vrde
+        if vrde:
+            cmd = '%s --vrde %s' (cmd, vrde)
+
+        # vrdeextpack
+        if vrdeextpack:
+            cmd = '%s --vrdeextpack %s' (cmd, vrdeextpack)
+
+        # vrdeproperty
+        if vrdeproperty:
+            cmd = '%s --vrdeproperty %s' (cmd, vrdeproperty)
+
+        # vrdeport
+        if vrdeport:
+            cmd = '%s --vrdeport %s' (cmd, vrdeport)
+
+        # vrdeaddress
+        if vrdeaddress:
+            cmd = '%s --vrdeaddress %s' (cmd, vrdeaddress)
+
+        # vrdeauthtype
+        if vrdeauthtype:
+            cmd = '%s --vrdeauthtype %s' (cmd, vrdeauthtype)
+
+        # vrdeauthlibrary
+        if vrdeauthlibrary:
+            cmd = '%s --vrdeauthlibrary %s' (cmd, vrdeauthlibrary)
+
+        # vrdemulticon
+        if vrdemulticon:
+            cmd = '%s --vrdemulticon %s' (cmd, vrdemulticon)
+
+        # vrdereusecon
+        if vrdereusecon:
+            cmd = '%s --vrdereusecon %s' (cmd, vrdereusecon)
+
+        # vrdevideochannel
+        if vrdevideochannel:
+            cmd = '%s --vrdevideochannel %s' (cmd, vrdevideochannel)
+
+        # vrdevideochannelquality
+        if vrdevideochannelquality:
+            cmd = '%s --vrdevideochannelquality %s' (cmd,
+                    vrdevideochannelquality)
+
+        # usb
+        if usb:
+            cmd = '%s --usb %s' (cmd, usb)
+
+        # usbehci
+        if usbehci:
+            cmd = '%s --usbehci %s' (cmd, usbehci)
+
+        # snapshotfolder
+        if snapshotfolder:
+            cmd = '%s --snapshotfolder %s' (cmd, snapshotfolder)
+
+        # teleporter
+        if teleporter:
+            cmd = '%s --teleporter %s' (cmd, teleporter)
+
+        # teleporterport
+        if teleporterport:
+            cmd = '%s --teleporterport %s' (cmd, teleporterport)
+
+        # teleporteraddress
+        if teleporteraddress:
+            cmd = '%s --teleporteraddress %s' (cmd, teleporteraddress)
+
+        # teleporterpassword
+        if teleporterpassword:
+            cmd = '%s --teleporteraddress %s' (cmd, teleporteraddress)
 
         stdout, stderr = run_cmd(cmd)
         return parse_modifyvm(stdout, stderr)
