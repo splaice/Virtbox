@@ -157,29 +157,56 @@ class ManageModifyVMTestCase(testify.TestCase):
     """
     @testify.setup
     def setup_createvm(self):
-        self.name = 'foo'
+        self.vm_name = 'foo'
         self.new_name = 'bar'
-        self.vm = generate_vm(name=self.name)
+        self.vm = generate_vm(name=self.vm_name)
 
     @testify.teardown
     def destroy_vm(self):
         delete_vm(**self.vm)
 
     def test_modifyvm_new_name_by_name(self):
-        testify.assert_equal(self.name, self.vm['name'])
+        testify.assert_equal(self.vm_name, self.vm['name'])
 
-        Manage.modifyvm(name=self.vm['name'], new_name=self.new_name)
+        Manage.modifyvm(vm_name=self.vm['name'], name=self.new_name)
         vm_info = Manage.showvminfo(uuid=self.vm['uuid'])
 
         testify.assert_equal(self.new_name, vm_info['name'])
 
     def test_modifyvm_new_name_by_uuid(self):
-        testify.assert_equal(self.name, self.vm['name'])
+        testify.assert_equal(self.vm_name, self.vm['name'])
 
-        Manage.modifyvm(uuid=self.vm['uuid'], new_name=self.new_name)
+        Manage.modifyvm(vm_uuid=self.vm['uuid'], name=self.new_name)
         vm_info = Manage.showvminfo(uuid=self.vm['uuid'])
 
         testify.assert_equal(self.new_name, vm_info['name'])
+
+    def test_modifyvm_adjust_memory_by_uuid(self):
+        memory = "128"
+        testify.assert_equal(self.vm_name, self.vm['name'])
+
+        Manage.modifyvm(vm_uuid=self.vm['uuid'], memory=memory)
+        vm_info = Manage.showvminfo(uuid=self.vm['uuid'])
+
+        testify.assert_equal(memory, vm_info['memory'])
+
+    def test_modifyvm_basic_configuration(self):
+        memory = "256"
+        rtcuseutc = "on"
+        nic1 = "hostonly"
+        nictype1 = "Am79C973"
+        hostonlyadapter1 = "vboxnet0"
+
+        testify.assert_equal(self.vm_name, self.vm['name'])
+        Manage.modifyvm(vm_uuid=self.vm['uuid'], memory=memory,
+                rtcuseutc=rtcuseutc, nic1=nic1, nictype1=nictype1,
+                hostonlyadapter1=hostonlyadapter1)
+        vm_info = Manage.showvminfo(uuid=self.vm['uuid'])
+
+        testify.assert_equal(memory, vm_info['memory'])
+        testify.assert_equal(rtcuseutc, vm_info['rtcuseutc'])
+        testify.assert_equal(nic1, vm_info['nic1'])
+        testify.assert_equal(hostonlyadapter1, vm_info['hostonlyadapter1'])
 
 
 class ManageCloseMediumTestCase(testify.TestCase):
