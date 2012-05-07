@@ -11,11 +11,11 @@ import logging
 from .utils import run_cmd
 from .errors import (VirtboxManageError, VirtboxCommandNotImplemented,
         VirtboxMissingArgument)
-from .parsers import (parse_list_vms, parse_list_ostypes, parse_createvm,
-        parse_showvminfo, parse_createhd, parse_unregistervm,
-        parse_showhdinfo, parse_closemedium, parse_modifyvm,
-        parse_storagectl_add, parse_storagectl_remove, parse_storageattach,
-        parse_version)
+from .parsers import (parse_list_vms, parse_list_runningvms,
+        parse_list_ostypes, parse_createvm, parse_showvminfo, parse_createhd,
+        parse_unregistervm, parse_showhdinfo, parse_closemedium,
+        parse_modifyvm, parse_storagectl_add, parse_storagectl_remove,
+        parse_storageattach, parse_version, parse_startvm, parse_controlvm)
 
 VBOXMANAGE_CMD = 'VBoxManage'
 BOOLEAN_OPTIONS = ('on', 'off')
@@ -67,9 +67,11 @@ class Manage(object):
     @classmethod
     def list_runningvms(cls):
         """
-        TODO: implement me
         """
-        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+        cmd = '%s list vms' % VBOXMANAGE_CMD
+
+        stdout, stderr = run_cmd(cmd)
+        return parse_list_runningvms(stdout, stderr)
 
     @classmethod
     def list_ostypes(cls):
@@ -1240,18 +1242,38 @@ class Manage(object):
         raise VirtboxCommandNotImplemented(reason="not yet implemented")
 
     @classmethod
-    def startvm(cls):
+    def startvm(cls, vm_uuid=None, vm_name=None, start_type=None):
         """
-        TODO: implement me
         """
-        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+        cmd = '%s startvm ' % VBOXMANAGE_CMD
+
+        if vm_uuid:
+            cmd = '%s %s' % (cmd, vm_uuid)
+        elif vm_name:
+            cmd = '%s %s' % (cmd, vm_name)
+
+        if start_type:
+            cmd = '%s --type %s' % (cmd, start_type)
+
+        stdout, stderr = run_cmd(cmd)
+        return parse_startvm(stdout, stderr)
 
     @classmethod
-    def controlvm(cls):
+    def controlvm(cls, vm_uuid=None, vm_name=None, action=None):
         """
-        TODO: implement me
         """
-        raise VirtboxCommandNotImplemented(reason="not yet implemented")
+        cmd = '%s controlvm ' % VBOXMANAGE_CMD
+
+        if vm_uuid:
+            cmd = '%s %s' % (cmd, vm_uuid)
+        elif vm_name:
+            cmd = '%s %s' % (cmd, vm_name)
+
+        if action:
+            cmd = '%s %s' % (cmd, action)
+
+        stdout, stderr = run_cmd(cmd)
+        return parse_controlvm(stdout, stderr)
 
     @classmethod
     def discardstate(cls):

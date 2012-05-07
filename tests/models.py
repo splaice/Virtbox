@@ -10,6 +10,7 @@ import os
 import logging
 import testify
 import uuid
+import time
 
 from virtbox.models import Manage
 from virtbox.utils import (id_generator, generate_vm, delete_vm, generate_hd,
@@ -24,6 +25,24 @@ class ManageVersionTestCase(testify.TestCase):
     def test_version(self):
         out = Manage.version()
         testify.assert_equal(bool(out['version']), True)
+
+
+class ManageListVMSTestCase(testify.TestCase):
+    @testify.setup
+    def setup_vm(self):
+        self.vms = []
+        self.vms.append(generate_vm())
+
+    @testify.teardown
+    def cleanup_vm(self):
+        Manage.unregistervm(name=self.vms[0]['name'], delete=True)
+
+    def test_list_vms(self):
+        vms = Manage.list_vms()
+        testify.assert_equal(vms[0]['name'], self.vms[0]['name'],
+                'name mismatch')
+        vm_uuid = uuid.UUID('{%s}' % vms[0]['uuid'])
+        testify.assert_equal(type(vm_uuid), type(uuid.uuid4()), 'no uuid set')
 
 
 class ManageListVMSManyTestCase(testify.TestCase):
@@ -49,29 +68,65 @@ class ManageListVMSManyTestCase(testify.TestCase):
                 'name mismatch')
 
 
+class ManageListRunningVMSTestCase(testify.TestCase):
+    @testify.setup
+    def setup(self):
+        self.vm0 = generate_vm()
+        self.running_uuid0 = Manage.startvm(vm_uuid=self.vm0['uuid'],
+                start_type='headless')
+        time.sleep(5)
+
+    @testify.teardown
+    def cleanup_vm(self):
+        Manage.controlvm(vm_uuid=self.vm0['uuid'], action='poweroff')
+        time.sleep(5)
+        delete_vm(**self.vm0)
+
+    def test_list_runningvms(self):
+        vms = Manage.list_runningvms()
+        testify.assert_equal(vms[0]['name'], self.vm0['name'],
+                'name mismatch')
+
+
+class ManageListManyRunningVMSTestCase(testify.TestCase):
+    @testify.setup
+    def setup(self):
+        self.vm0 = generate_vm()
+        self.running_uuid0 = Manage.startvm(vm_uuid=self.vm0['uuid'],
+                start_type='headless')
+        self.vm1 = generate_vm()
+        self.running_uuid1 = Manage.startvm(vm_uuid=self.vm1['uuid'],
+                start_type='headless')
+        self.vm2 = generate_vm()
+        self.running_uuid2 = Manage.startvm(vm_uuid=self.vm2['uuid'],
+                start_type='headless')
+        time.sleep(5)
+
+    @testify.teardown
+    def cleanup_vm(self):
+        Manage.controlvm(vm_uuid=self.vm0['uuid'], action='poweroff')
+        Manage.controlvm(vm_uuid=self.vm1['uuid'], action='poweroff')
+        Manage.controlvm(vm_uuid=self.vm2['uuid'], action='poweroff')
+        time.sleep(5)
+        delete_vm(**self.vm0)
+        delete_vm(**self.vm1)
+        delete_vm(**self.vm2)
+
+    def test_list_runningvms(self):
+        vms = Manage.list_runningvms()
+        testify.assert_equal(vms[0]['name'], self.vm0['name'],
+                'name mismatch')
+        testify.assert_equal(vms[1]['name'], self.vm1['name'],
+                'name mismatch')
+        testify.assert_equal(vms[2]['name'], self.vm2['name'],
+                'name mismatch')
+
+
 class ManageListOSTypesTestCase(testify.TestCase):
     def test_list_ostypes(self):
         ostypes = Manage.list_ostypes()
         testify.assert_equal(ostypes[0]['os_desc'], 'Other/Unknown')
         testify.assert_equal(ostypes[0]['os_type'], 'Other')
-
-
-class ManageListVMSTestCase(testify.TestCase):
-    @testify.setup
-    def setup_vm(self):
-        self.vms = []
-        self.vms.append(generate_vm())
-
-    @testify.teardown
-    def cleanup_vm(self):
-        Manage.unregistervm(name=self.vms[0]['name'], delete=True)
-
-    def test_list_vms(self):
-        vms = Manage.list_vms()
-        testify.assert_equal(vms[0]['name'], self.vms[0]['name'],
-                'name mismatch')
-        vm_uuid = uuid.UUID('{%s}' % vms[0]['uuid'])
-        testify.assert_equal(type(vm_uuid), type(uuid.uuid4()), 'no uuid set')
 
 
 class ManageShowVMInfoTestCase(testify.TestCase):
@@ -207,6 +262,32 @@ class ManageModifyVMTestCase(testify.TestCase):
         testify.assert_equal(rtcuseutc, vm_info['rtcuseutc'])
         testify.assert_equal(nic1, vm_info['nic1'])
         testify.assert_equal(hostonlyadapter1, vm_info['hostonlyadapter1'])
+
+
+class ManageStartVMTestCase(testify.TestCase):
+    @testify.setup
+    def setup(self):
+        self.vm = generate_vm()
+        self.hdd = generate_hd()
+        self.memory = "256"
+        self.rtcuseutc = "on"
+        Manage.modifyvm(vm_uuid=self.vm['uuid'], memory=self.memory,
+                rtcuseutc=self.rtcuseutc)
+
+    def test_start_and_stop_vm(self):
+        result = Manage.startvm(vm_name=self.vm['uuid'], start_type='headless')
+        testify.assert_equal(self.vm['uuid'], result['uuid'])
+        # this looks hacky but waiting on these operations finishing will
+        # be handled in the biz logic at a higher level
+        time.sleep(5)
+        Manage.controlvm(vm_uuid=self.vm['uuid'], action='poweroff')
+        time.sleep(5)
+
+    @testify.teardown
+    def teardown(self):
+        delete_hd(**self.hdd)
+        delete_vm(**self.vm)
+        #Manage.controlvm(vm_uuid=self.vm['uuid'], action='poweroff')
 
 
 class ManageCloseMediumTestCase(testify.TestCase):
