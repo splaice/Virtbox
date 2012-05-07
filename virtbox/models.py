@@ -10,7 +10,7 @@ import logging
 
 from .utils import run_cmd
 from .errors import (VirtboxManageError, VirtboxCommandNotImplemented,
-        VirtboxMissingArgument)
+        VirtboxMissingArgument, CommandError)
 from .parsers import (parse_list_vms, parse_list_runningvms,
         parse_list_ostypes, parse_createvm, parse_showvminfo, parse_createhd,
         parse_unregistervm, parse_showhdinfo, parse_closemedium,
@@ -41,6 +41,45 @@ VM_NICPROMISC_OPTIONS = ('deny', 'allow-vms', 'allow-all')
 
 # setup module level logger
 LOGGER = logging.getLogger(__name__)
+
+
+class Machine(object):
+
+    def __init__(self, name=None):
+
+        # Name of the virtual machine this instance represents
+        self.name = name
+
+        # Integer Code for exit code of last executed command
+        self.status_code = None
+
+        # UUID of the virtual machine this instance represents
+        self.uuid = None
+
+        # Status of the virtual machine this instance represents
+        self.state = None
+
+        # update
+        self.refresh()
+
+    def refresh(self):
+        # set the information about the virtual machine from the showvminfo
+        # command
+        try:
+            info = Manage.showvminfo(name=self.name)
+        except CommandError, e:
+            LOGGER.exception(e)
+            self.status_code = e.status_code
+            return
+        else:
+            self.status_code = 0
+
+        self.uuid = info.get('UUID')
+        self.state = info.get('State')
+
+    def __repr__(self):
+        return '<Machine [%s:%s:%s]>' % (self.name, self.uuid,
+                self.status_code)
 
 
 class Manage(object):
