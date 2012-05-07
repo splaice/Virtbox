@@ -1,40 +1,84 @@
-py-boostrap: Python Package Bootstrap Project
+Virtbox: Simple VirtualBox management
 =========================
 
-Python Package Bootstrap Project is an example boilerplate for creating
-distributable Python packages.
+Build, configure, manage virtualbox virtual machines.
 
-There are lots of information detailing how to create a Python package
-but few examples that are comprehensive. The goal of this project is to
-provide Python developers with a boilerplate project they can use as a
-guide and example.
+
+::
+
+    >>> v = virtbox.create(name='jangofett', memory=128, hdds=[{'name': 'main', 'size': 2048}])
+    >>> v.status_code
+    0
+    >>> v.name
+    'jangofett'
+    >>> v.status
+    'off'
+    >>> v.memory
+    128
+    >>> v.hdds
+    [
+        {
+            'size': 2048,
+            'format': 'VDI',
+            'variant': 'Standard',
+            'filename': '/Users/homie/VirtualBox\ VMs/dev/main.vdi'
+         }
+    ]
+    >>> v.start()
+    >>> v.status_code
+    0
+    >>> v.status
+    'booting'
+    >>> v.status
+    'running'
+    >>> v.run('shutdown -h now')
+    >>> v.status_code
+    0
+    >>> v.status
+    'off'
+    >>> v.export(image='/tmp/myclone.virtbox')
+    v.status_code
+    0
+    >>> v2 = virtbox.create(name='bobafett', image='/tmp/mylcone.virtbox')
+    >>> v2.status_code
+    0
+    >>> v2.name
+    'bobafett'
+    >>> v2.start()
+    >>> v2.status_code
+    0
+    >>> v2.status
+    'running'
+
+::
+
+    >>> virtbox.machines
+    [
+        {
+            'name': 'jangofett',
+            'uuid': 'xyz'
+        },
+        {
+            'name': 'bobafett',
+            'uuid': 'xyz'
+        },
+    ]
+    >>> v = virtbox.machine(name='jangofett')
+    >>> v.status_code
+    0
+    >>> v.status
+    'off'
+    >>> v2 = virtbox.machine(name='bobafett')
+    >>> v2.status_code
+    0
+    >>> v2.status
+    'running'
 
 
 Features
 --------
 
-- Example package and module layout
-- Example testing integration and layout using testify
-- Example `setup.py` using distutils
-- Example `Makefile` for quick development setup using virtualenv and pip
-
-
-Use
----
-
-To create a new project derived from the boilerplate: ::
-
-    ~/Projects $ git clone https://github.com/splaice/py-bootstrap.git
-    ~/Projects $ cd py-bootstrap
-    ~/Projects/py-bootstrap $ git archive master | tar -x -C ~/Projects/myproject
-
-Now you should have a reasonable working python project. You can set it up in development mode using the `Makefile`
-
-    ~/Projects/myproject $ make dev
-
-The tests should all work:
-
-    ~/Projects/myproject $ make test
+- Example ...
 
 
 Contribute
