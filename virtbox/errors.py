@@ -19,7 +19,6 @@ class CommandError(Exception):
     """ This is an error specific to running a VBoxManage command.
     """
     def __init__(self, status_code=None, cmd=None, stdout=None, stderr=None):
-        Exception.__init__()
         self.status_code = status_code
         self.cmd = cmd
         self.stdout = stdout

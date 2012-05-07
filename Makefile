@@ -29,6 +29,9 @@ test-debug: pep8 pyflakes env/.pip nuke
 test-parsers: pep8 pyflakes env/.pip
 	sudo su virtbox -c 'DEBUG="virtbox" bin/virtual-env-exec testify tests.parsers'
 
+test-functional: pep8 pyflakes env/.pip
+	sudo su virtbox -c 'DEBUG="virtbox" bin/virtual-env-exec testify tests.functional'
+
 shell:
 	bin/virtual-env-exec ipython
 

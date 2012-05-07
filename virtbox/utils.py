@@ -97,8 +97,9 @@ def generate_ctl(**kwargs):
     """
     from .models import Manage
     data = {'name': 'primary',
-            'ctl_type': 'scsi',
-            'controller': 'LSILogic'}
+            'ctl_type': 'sata',
+            'sataportcount': 2,
+            'bootable': 'on'}
     data.update(kwargs)
     Manage.storagectl_add(**data)
     return data
@@ -115,4 +116,8 @@ def delete_ctl(**kwargs):
         del data['controller']
     if data.get('ctl_type'):
         del data['ctl_type']
+    if data.get('sataportcount'):
+        del data['sataportcount']
+    if data.get('bootable'):
+        del data['bootable']
     return Manage.storagectl_remove(**data)

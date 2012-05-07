@@ -1417,8 +1417,8 @@ class Manage(object):
     @classmethod
     def storagectl_add(cls, uuid=None, vmname=None, name=None, ctl_type=None,
             controller=None, sataideemulation1=None, sataideemulation2=None,
-            sataideemulation3=None, sataideemulation4=None,  hostiocache=None,
-            bootable=False):
+            sataideemulation3=None, sataideemulation4=None, sataportcount=None,
+            hostiocache=None, bootable=False):
         """
         """
         cmd = '%s storagectl' % VBOXMANAGE_CMD
@@ -1458,6 +1458,9 @@ class Manage(object):
 
         if sataideemulation4:
             cmd = '%s --sataideemulation4 %d' % (cmd, sataideemulation4)
+
+        if sataportcount:
+            cmd = '%s --sataportcount %d' % (cmd, sataportcount)
 
         if hostiocache:
             cmd = '%s --hostiocache %s' % (cmd, hostiocache)
