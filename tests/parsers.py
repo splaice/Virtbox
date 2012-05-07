@@ -12,7 +12,7 @@ import codecs
 import testify
 
 
-from virtbox.parsers import parse_createhd, parse_list_ostypes
+from virtbox.parsers import parse_createhd, parse_list_ostypes, parse_startvm
 
 
 # setup module level logger
@@ -21,18 +21,36 @@ logger = logging.getLogger(__name__)
 
 VBOXMANAGE_LIST_OSTYPES = os.path.join('parser_test_data',
     'vboxmanage_list_ostypes.txt')
+VBOXMANAGE_STARTVM = os.path.join('parser_test_data',
+    'vboxmanage_startvm.txt')
 
 
 class ParseListOSTypesTestCase(testify.TestCase):
     @testify.setup
     def setup(self):
-        with codecs.open(VBOXMANAGE_LIST_OSTYPES, 'r', 'utf-8') as input:
-            self.txt = input.read()
+        with codecs.open(VBOXMANAGE_LIST_OSTYPES, 'r', 'utf-8') as stdout:
+            self.stdout = stdout.read()
+
+        self.stderr = ''
 
     def test_parse_ostypes_list(self):
-        ostypes = parse_list_ostypes(self.txt, '')
+        ostypes = parse_list_ostypes(self.stdout, self.stderr)
         testify.assert_equal(ostypes[0]['os_desc'], 'Other/Unknown')
         testify.assert_equal(ostypes[0]['os_type'], 'Other')
+
+
+class ParseStartVMTestCase(testify.TestCase):
+    @testify.setup
+    def setup(self):
+        self.test_uuid = 'f4b0a749-820b-43c2-967e-a7a5f539cfd7'
+        with codecs.open(VBOXMANAGE_STARTVM, 'r', 'utf-8') as stdout:
+            self.stdout = stdout.read()
+
+        self.stderr = ''
+
+    def test_parse_startvm(self):
+        result = parse_startvm(self.stdout, self.stderr)
+        testify.assert_equal(self.test_uuid, result['uuid'])
 
 
 class ParseCreateHDTestCase(testify.TestCase):
