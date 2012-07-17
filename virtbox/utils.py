@@ -51,36 +51,36 @@ def id_generator(size=6, chars=string.ascii_lowercase + string.digits):
 def generate_vm(**kwargs):
     """
     """
-    from .models import Manage
+    from .manage import createvm
     data = {'name': id_generator(7),
             'ostype': 'Linux'}
     data.update(kwargs)
-    return Manage.createvm(**data)
+    return createvm(**data)
 
 
 def delete_vm(**kwargs):
     """
     """
-    from .models import Manage
+    from .manage import unregistervm
     data = {'delete': True}
     data.update(kwargs)
     # prune unneeded / unexpected kwargs
     if data.get('file_path'):
         del data['file_path']
-    return Manage.unregistervm(**data)
+    return unregistervm(**data)
 
 
 def generate_hd(**kwargs):
     """
     """
-    from .models import Manage
+    from .manage import createhd
     filename = '%s.vdi' % id_generator()
     data = {'size': '128',
             'hd_format': 'VDI',
             'variant': 'Standard',
             'filename': os.path.join('/tmp', filename)}
     data.update(kwargs)
-    Manage.createhd(**data)
+    createhd(**data)
     return data
 
 
@@ -95,20 +95,20 @@ def delete_hd(**kwargs):
 def generate_ctl(**kwargs):
     """
     """
-    from .models import Manage
+    from .manage import storagectl_add
     data = {'name': 'primary',
             'ctl_type': 'sata',
             'sataportcount': 2,
             'bootable': 'on'}
     data.update(kwargs)
-    Manage.storagectl_add(**data)
+    storagectl_add(**data)
     return data
 
 
 def delete_ctl(**kwargs):
     """
     """
-    from .models import Manage
+    from .manage import storagectl_remove
     data = {'name': 'primary'}
     data.update(kwargs)
     # prune unneeded / unexpected kwargs
@@ -120,4 +120,4 @@ def delete_ctl(**kwargs):
         del data['sataportcount']
     if data.get('bootable'):
         del data['bootable']
-    return Manage.storagectl_remove(**data)
+    return storagectl_remove(**data)
